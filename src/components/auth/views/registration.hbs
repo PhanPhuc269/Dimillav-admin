@@ -1,0 +1,55 @@
+<!-- Start Banner Area -->
+<section class="banner-area organic-breadcrumb">
+	<div class="container">
+		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+			
+		</div>
+	</div>
+</section>
+<!-- End Banner Area -->
+
+<!--================register Box Area =================-->
+<section class="register_box_area section_gap">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6">
+				<div class="register_box_img">
+					<img class="img-fluid" src="/img/login.jpg" alt="">
+					<div class="hover">
+						<h4>Welcome to our shoe store!</h4>
+						<p>If you already have an account, </p>
+						<a class="primary-btn" href="/login">click here to login</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="register_form_inner pt-5">
+					<h3>Sign up to enter</h3>
+					<form class="row register_form" action="/register" method="post" id="registerForm" novalidate="novalidate">
+						
+						<div class="col-md-12 form-group">
+							<input required type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" >
+						</div>
+						<div class="col-md-12 form-group">
+							<input required type="email" class="form-control" id="email" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" >
+						</div>
+						<div class="col-md-12 form-group">
+							<input required type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" >
+						</div>
+						<div class="col-md-12 form-group">
+							<input required type="password" class="form-control" id="re-password" name="re-password" placeholder="Re-enter password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Re-enter password'" >
+						</div>
+						<div class="col-md-12 form-group">
+							<div id="error-message" class="text-danger"></div>	
+						</div>
+						<div class="col-md-12 form-group">
+							<button type="submit" value="submit" class="register_btn" onclick="handleRegister(event)">Continue</button>
+							<a href="#">Conditions of Use and Privacy Notice</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<script src="js/register.js"></script>
