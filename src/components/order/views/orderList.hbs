@@ -1,0 +1,62 @@
+<body>
+    <!-- Start Banner Area -->
+    <section class="banner-area organic-breadcrumb">
+        <div class="container">
+            <div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
+                <div class="col-first">
+                    <h1>Danh sách đơn hàng</h1>
+                    <nav class="d-flex align-items-center">
+                        <a href="/home">Trang chủ<span class="lnr lnr-arrow-right"></span></a>
+                        <a href="/order/list">Đơn hàng</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Banner Area -->
+
+    <!--================ Order List Area =================-->
+    <section class="order_list_area section_gap">
+        <div class="container">
+            <h2 class="mb-4">Danh sách đơn hàng</h2>
+            <div class="order_table">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                  <tbody>
+                            {{#each orders}}
+                            <tr>
+                                <td>{{this._id}}</td>
+                                <td>{{this.createdAt}}</td>
+                                <td>${{this.totalAmount}}</td>
+                                <td>{{this.status}}</td>
+                                <td>
+                                    {{#if (eq this.status "pending")}}
+                                    <form action="/transaction/create/" method="POST">
+                                        <input type="hidden" name="orderId" value="{{this._id}}">
+                                        <button type="submit" class="btn btn-primary">Thanh toán</button>
+                                    </form>
+                                    {{else}}
+                                    <span>Đã thanh toán</span>
+                                    {{/if}}
+                                </td>
+                                <td>
+                                    <a href="/order/detail/{{this._id}}" class="btn btn-info">Xem chi tiết</a>
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+
+                </table>
+            </div>
+        </div>
+    </section>
+    <!--================ End Order List Area =================-->
+</body>
