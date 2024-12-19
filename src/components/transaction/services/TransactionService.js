@@ -1,11 +1,4 @@
-const Product = require('../models/Product');
-const nodemailer = require('nodemailer');
-const mjml = require('mjml');
-const fs = require('fs');
-const path = require('path');
-const { google } = require('googleapis');
-const jwt = require('jsonwebtoken');
-const sgMail = require('@sendgrid/mail');
+
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
