@@ -9,11 +9,12 @@ router.get('/list',productController.ViewProductListings);
 //router.get('/confirmation', ensureAuthenticated,productController.ViewOrderConfirmation);
 router.get('/filter', productController.getFilteredProducts);
 router.get('/search', productController.SearchProduct);
-
-router.put('/product/:slug', productController.updateProduct);
-router.patch('/product/:slug/image', productController.addImage);
-router.delete('/product/:slug/image', productController.removeImage);
-router.patch('/product/:slug/category-brand', productController.changeCategoryOrBrand);
-router.patch('/product/:slug/availability', productController.updateAvailability);
+// Route để hiển thị form cập nhật sản phẩm
+router.get('/update/:slug', productController.editProductForm);
+router.post('/update/:slug', productController.updateProduct);
+router.patch('/:slug/image', productController.addImage);
+router.delete('/:slug/image', productController.removeImage);
+router.patch('/:slug/category-brand', productController.changeCategoryOrBrand);
+router.patch('/:slug/availability', productController.updateAvailability);
 
 module.exports = router;

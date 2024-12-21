@@ -1,0 +1,28 @@
+<h1>Sản phẩm có Doanh thu cao nhất</h1>
+<form method="GET" action="/report/topProducts">
+    <label for="startDate">Từ ngày:</label>
+    <input type="date" name="startDate" id="startDate" value="{{startDate}}" required>
+    <label for="endDate">Đến ngày:</label>
+    <input type="date" name="endDate" id="endDate" value="{{endDate}}" required>
+    <button type="submit">Xem báo cáo</button>
+</form>
+
+<h2>Kết quả:</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Doanh thu</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each topProducts}}
+        <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.totalQuantity}}</td>
+            <td>{{this.totalRevenue}}</td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

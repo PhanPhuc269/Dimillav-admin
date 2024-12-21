@@ -15,7 +15,7 @@ const Product = new Schema({
     color:{type: String},
     rate:{type: Number},
     slug: { type: String, unique: true },
-
+    quantity: { type: Number, default: 0 }, // Thêm trường số lượng
 });
 
 Product.pre('save', async function (next) {

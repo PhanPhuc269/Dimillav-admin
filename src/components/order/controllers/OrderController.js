@@ -1,8 +1,10 @@
 const { mutipleMongooseToObject } = require('../../../utils/mongoose');
 const { mongooseToObject } = require('../../../utils/mongoose');
-const Cart = require("@components/cart/models/Cart");
+
 const Product = require("@components/product/models/Product");
 const Order = require("@components/order/models/Order");
+const OrderService = require("../services/OrderService");
+
 
 class OrderController{
     ViewProductCheckout(req, res, next) {
@@ -11,13 +13,15 @@ class OrderController{
 
     async ViewOrderList(req, res, next) {
         try {
-            const customerId = req.user._id;
-            console.log('user: ', customerId);
-            const orders = await OrderService.getOrdersByCustomerId(customerId);
+            // Lấy tất cả các đơn hàng và sắp xếp theo ngày tạo (mới nhất trước)
+            const orders = await OrderService.getAllOrdersSortedByDate();
+    
+            // Render danh sách đơn hàng
             res.render('orderList', {
                 orders: mutipleMongooseToObject(orders),
             });
         } catch (error) {
+            console.error('Error fetching order list:', error);
             next(error);
         }
     }
@@ -74,37 +78,44 @@ class OrderController{
         }
     }
 
-     // Hiển thị danh sách đơn hàng, sắp xếp theo thời gian tạo
-     async viewOrdersSorted(req, res, next) {
-        try {
-            const customerId = req.user._id;
-            const orders = await OrderService.getOrdersSortedByCreationTime(customerId);
-            res.render('orderList', { orders: mutipleMongooseToObject(orders) });
-        } catch (error) {
-            console.error('Error fetching sorted orders:', error);
-            res.status(500).render('errorOrder', {
-                message: 'Lỗi khi tải danh sách đơn hàng.',
-                errorDetails: error.message,
-            });
-        }
+   // Hiển thị danh sách đơn hàng, phân loại theo customerId
+   async viewOrdersGroupedByCustomer(req, res) {
+    try {
+        // Gọi hàm từ OrderService để lấy danh sách đơn hàng và thông tin khách hàng
+        const groupedOrders = await OrderService.getOrdersGroupedByCustomerWithDetails();
+        console.log(groupedOrders);
+        res.render('orderList', { groupedOrders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Lỗi khi tải danh sách đơn hàng');
     }
+}
 
-    // Lọc danh sách đơn hàng theo trạng thái
-    async filterOrders(req, res, next) {
-        try {
-            const customerId = req.user._id;
-            const { status } = req.query;
 
-            const orders = await OrderService.filterOrdersByStatus(customerId, status);
-            res.render('orderList', { orders: mutipleMongooseToObject(orders) });
-        } catch (error) {
-            console.error('Error filtering orders:', error);
-            res.status(500).render('errorOrder', {
-                message: 'Lỗi khi lọc danh sách đơn hàng.',
-                errorDetails: error.message,
-            });
-        }
+   // Lọc danh sách đơn hàng theo trạng thái
+   async filterOrders(req, res, next) {
+    try {
+        // Lấy trạng thái từ query params
+        const { status } = req.query;
+console.log('status: ',status);
+        // Lọc đơn hàng dựa trên trạng thái
+        const orders = await OrderService.filterOrdersByStatus(status);
+        console.log('đơn: ',orders);
+        // Trả về danh sách đơn hàng dưới dạng JSON
+        res.json({ success: true, orders });
+    } catch (error) {
+        console.error('Error filtering orders:', error);
+
+        // Trả về thông báo lỗi dưới dạng JSON
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi lọc danh sách đơn hàng.',
+            errorDetails: error.message,
+        });
     }
+}
+
+
 
     // Hiển thị chi tiết đơn hàng
     async viewOrderDetails(req, res, next) {
@@ -137,7 +148,7 @@ class OrderController{
                 return res.status(404).render('errorOrder', { message: 'Không tìm thấy đơn hàng.' });
             }
 
-            res.redirect(`/order/${orderId}/detail`); // Điều hướng tới trang chi tiết đơn hàng
+            res.redirect(`/order/detail/${orderId}`); // Điều hướng tới trang chi tiết đơn hàng
         } catch (error) {
             console.error('Error updating order status:', error);
             res.status(500).render('errorOrder', {

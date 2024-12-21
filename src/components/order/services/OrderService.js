@@ -1,14 +1,5 @@
-const Product = require('../models/Product');
-const nodemailer = require('nodemailer');
-const mjml = require('mjml');
-const fs = require('fs');
-const path = require('path');
-const { google } = require('googleapis');
-const jwt = require('jsonwebtoken');
-const sgMail = require('@sendgrid/mail');
 
-
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const UserService = require('@components/auth/services/UserService');
 
 const Order = require('../models/Order');
 
@@ -94,10 +85,17 @@ async createOrder(userId, orderData) {
         return Order.find({ customerId }).sort({ createdAt: -1 });
     }
 
-    // Lọc đơn hàng theo trạng thái
-    async filterOrdersByStatus(customerId, status) {
-        return Order.find({ customerId, status });
+   // Lọc đơn hàng theo trạng thái
+async filterOrdersByStatus(status) {
+    // Nếu trạng thái không được cung cấp, lấy tất cả đơn hàng
+    if (!status) {
+        return Order.find({});
     }
+
+    // Nếu có trạng thái, chỉ lấy đơn hàng với trạng thái đó
+    return Order.find({ status });
+}
+
 
     // Lấy chi tiết đơn hàng theo ID
     async getOrderDetails(orderId) {
@@ -107,6 +105,42 @@ async createOrder(userId, orderData) {
     // Cập nhật trạng thái đơn hàng
     async updateOrderStatus(orderId, status) {
         return Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    }
+    async getAllOrdersSortedByCreationTime() {
+        return await Order.find().sort({ createdAt: -1 }).lean();
+    }
+
+    // Lấy danh sách đơn hàng theo khách hàng (bao gồm thông tin chi tiết khách hàng)
+    async getOrdersGroupedByCustomerWithDetails() {
+        const orders = await this.getAllOrdersSortedByCreationTime(); // Lấy tất cả đơn hàng
+        const groupedOrders = {};
+
+        for (const order of orders) {
+            const userId = order.customerId;
+
+            // Nếu chưa có userId trong nhóm, gọi UserService để lấy thông tin khách hàng
+            if (!groupedOrders[userId]) {
+                const userDetails = await UserService.findUserByUserId(userId); // Lấy thông tin chi tiết khách hàng
+                groupedOrders[userId] = {
+                    user: userDetails, // Gán thông tin chi tiết khách hàng
+                    orders: [],
+                };
+            }
+
+            groupedOrders[userId].orders.push(order);
+        }
+
+        return groupedOrders;
+    }
+
+     async getAllOrdersSortedByDate() {
+        try {
+            const orders = await Order.find().sort({ createdAt: -1 }); // -1: giảm dần
+            return orders;
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+            throw error;
+        }
     }
 }
 

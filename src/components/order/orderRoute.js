@@ -6,21 +6,21 @@ const {ensureAuthenticated} = require('../../middlewares/AuthMiddleware');
 router.get('/',orderController.ViewProductCheckout);
 router.get('/checkout', ensureAuthenticated,orderController.ViewProductCheckout);
 router.post('/checkout', ensureAuthenticated,orderController.addOrder);
-router.get('/list',ensureAuthenticated,orderController.ViewOrderList);
-router.get('/detail/:_id',ensureAuthenticated,orderController.ViewOrderDetail);
+
+//router.get('/detail/:_id',ensureAuthenticated,orderController.ViewOrderDetail);
 
 
 
 // Hiển thị danh sách đơn hàng theo thời gian tạo
-router.get('/order/list', orderController.viewOrdersSorted);
+router.get('/list', orderController.ViewOrderList);
 
 // Lọc đơn hàng theo trạng thái
-router.get('/order/filter', orderController.filterOrders);
+router.get('/filter', orderController.filterOrders);
 
 // Hiển thị chi tiết đơn hàng
-router.get('/order/:id/detail', orderController.viewOrderDetails);
+router.get('/detail/:id', orderController.viewOrderDetails);
 
 // Cập nhật trạng thái đơn hàng
-router.post('/order/:id/status', orderController.updateOrderStatus);
+router.post('/updateStatus/:id', orderController.updateOrderStatus);
 
 module.exports = router;

@@ -4,8 +4,32 @@ const { mongooseToObject } = require('../../../utils/mongoose');
 //const ReviewController = require('../../review/controllers/ReviewController');
 const Product = require("../models/Product");
 const ProductService = require('../services/ProductService');
+const cloudinary = require('cloudinary').v2;
+const upload = require('../../../config/cloudinary/cloudinaryConfig');
+
 
 class ProductController {
+
+     // Hiển thị form cập nhật sản phẩm
+    async editProductForm(req, res, next) {
+        try {
+            const { slug } = req.params;
+
+            // Lấy thông tin sản phẩm từ slug
+            const product = await ProductService.findProductBySlug(slug);
+            if (!product) {
+                return res.status(404).json({ message: 'Product not found' });
+            }
+
+            // Render form với dữ liệu sản phẩm
+            res.render('edit-product', { product: mongooseToObject(product) });
+        } catch (error) {
+            console.error('Error rendering edit form:', error);
+            res.status(500).json({ message: 'Error rendering edit form', error });
+        }
+    }
+
+
     // Lọc sản phẩm
     async getFilteredProducts(req, res, next) {
         try {
@@ -203,38 +227,75 @@ class ProductController {
 
 
     async updateProduct(req, res, next) {
-        try {
-            const { slug } = req.params;
-            const updateData = req.body;
-
-            const updatedProduct = await ProductService.updateProduct(slug, updateData);
-            if (!updatedProduct) {
-                return res.status(404).json({ message: 'Product not found' });
+        upload.single('image')(req, res, async function (err) {
+            try {
+                if (err) {
+                    console.error('Multer error:', err);
+                    return res.status(400).json({ message: 'Error uploading file', error: err.message });
+                }
+    
+                const { slug } = req.params;
+                const updateData = req.body;
+    
+                // Tìm sản phẩm theo slug
+                const product = await ProductService.findProductBySlug(slug);
+                if (!product) {
+                    return res.status(404).json({ message: 'Product not found' });
+                }
+    
+                // Cập nhật các trường từ body (chỉ cập nhật nếu có giá trị)
+                for (const key in updateData) {
+                    if (updateData[key] !== undefined) {
+                        product[key] = updateData[key];
+                    }
+                }
+    
+                // Xử lý cập nhật hình ảnh nếu file được upload
+                if (req.file) {
+                    product.image = req.file.path; // URL của hình ảnh từ Cloudinary
+                }
+    
+                // Lưu sản phẩm sau khi cập nhật
+                const updatedProduct = await ProductService.saveProduct(product);
+    
+                res.json({ message: 'Product updated successfully', product: updatedProduct });
+            } catch (error) {
+                console.error('Error updating product:', error);
+                res.status(500).json({ message: 'Error updating product', error });
             }
-
-            res.json({ message: 'Product updated successfully', product: updatedProduct });
-        } catch (error) {
-            console.error('Error updating product:', error);
-            res.status(500).json({ message: 'Error updating product', error });
-        }
+        });
     }
+    
 
     // Thêm ảnh cho sản phẩm
-    async addImage(req, res, next) {
+  async addImage(req, res, next) {
+    upload.single('image')(req, res, async function (err) {
         try {
-            const { slug } = req.params;
-            const { image } = req.body;
-
-            if (!image) {
-                return res.status(400).json({ message: 'Image URL is required' });
+            // Xử lý lỗi từ Multer
+            if (err) {
+                console.error('Multer error:', err);
+                return res.status(400).json({ message: 'Error uploading file', error: err.message });
             }
 
+            // Lấy slug từ params
+            const { slug } = req.params;
+
+            // Tìm sản phẩm theo slug
             const product = await ProductService.findProductBySlug(slug);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
 
-            product.image = image;
+            // Kiểm tra nếu file không tồn tại
+            if (!req.file) {
+                return res.status(400).json({ message: 'No file uploaded' });
+            }
+
+            // Upload thành công, lấy URL của ảnh
+            const imageUrl = req.file.path;
+
+            // Cập nhật ảnh vào sản phẩm
+            product.image = imageUrl;
             await ProductService.saveProduct(product);
 
             res.json({ message: 'Image added successfully', product });
@@ -242,8 +303,9 @@ class ProductController {
             console.error('Error adding image:', error);
             res.status(500).json({ message: 'Error adding image', error });
         }
-    }
-
+    });
+}
+   
     // Xóa ảnh của sản phẩm
     async removeImage(req, res, next) {
         try {
