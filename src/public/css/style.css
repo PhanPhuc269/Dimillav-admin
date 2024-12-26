@@ -99,6 +99,10 @@
     .content {
         width: calc(100% - 250px);
     }
+    .content-only{
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
 
     .content.open {
         width: 100%;

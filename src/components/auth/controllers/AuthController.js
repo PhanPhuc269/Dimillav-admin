@@ -4,10 +4,9 @@ const crypto = require('crypto');
 const passport = require('passport');
 const UserService = require('../services/UserService');
 
-
 class AuthController{
     viewRegistration(req,res,next){
-        res.render('registration');
+        res.render('registration',  { layout: 'content-only' });
     }
     async register(req, res, next) {
         const { username, email, password } = req.body;
@@ -23,6 +22,19 @@ class AuthController{
             if (error.message === 'Username already exists' || error.message === 'Email already exists'|| error.message === 'Invalid email format') {
                 return res.status(400).json({ message: error.message });
             }
+            next(error);
+        }
+    }
+    async setAuthentication(req, res, next) {
+        try {
+            const userId = req.user._id;
+            const qrCode = await UserService.generateSecretKey(userId);
+            if (qrCode === null) {
+                return res.redirect('/');
+            }
+            return res.render('secretqr', { layout: 'content-only', qrCode });
+        } catch (error) {
+            console.error('Error in setAuthentication:', error);
             next(error);
         }
     }
@@ -130,7 +142,7 @@ class AuthController{
             return res.redirect('/');
         }
         const email = req.flash('email')[0] || '';
-        res.render('login', { email });
+        res.render('login', { layout: 'content-only', email });
     }
     // [POST] /login
     async login(req, res, next) {
@@ -141,18 +153,42 @@ class AuthController{
             if (!user) {
                 req.flash('error_msg', 'Sai email hoặc mật khẩu');
                 req.flash('email', req.body.email);
-                return res.redirect('/login');
+                return res.status(400).json({ message: 'Invalid email or password' });
             }
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
                 }
                 if (!user.isConfirmed) {
-                    return res.redirect('/verify'); // Redirect đến trang xác thực email
+                    return res.status(401).json({ message: 'Unauthorized: Invalid token or authentication failed' });
                 }
-                return res.redirect('/');
+                return res.status(200).json('Login is successful'); // Redirect về trang chủ sau khi xác thực
             });
         })(req, res, next);
+    }
+    // [GET] /verify
+    viewVerify(req, res, next) {
+        res.render('verify', { layout: 'content-only' });
+    }
+
+    // [POST] /verify
+    async verify(req, res, next) {
+        try {
+            const { token } = req.body;
+            const userId = req.user._id;
+            const verified = await UserService.verifyToken(userId, token);
+            if (verified) {
+                req.user.authenByCode = true;
+                console.log('User authenticated, session authenticated set:', req.session.authenticated);
+                res.status(200).json('Verification is successful');
+            } else {
+                console.log('Invalid token');
+                res.status(401).json({ message: 'Unauthorized: Invalid token or authentication failed' });
+            }
+        } catch (error) {
+            console.error('Error during verification:', error);
+            next(error);
+        }
     }
     // [GET] /logout
     logout (req, res,next){

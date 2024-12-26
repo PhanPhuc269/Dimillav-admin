@@ -1,5 +1,5 @@
 const Handlebars = require('handlebars');
-const User = require('@components/auth/models/User');
+const User = require('@components/auth/models/Admin');
 const { mutipleMongooseToObject } = require('../utils/mongoose');
 const { mongooseToObject } = require('../utils/mongoose');
 
