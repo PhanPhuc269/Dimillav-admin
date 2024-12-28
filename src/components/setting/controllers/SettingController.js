@@ -1,5 +1,5 @@
 const editProfileService = require('../services/EditProfileService');
-const upload = require('../../../config/cloudinaryConfig');
+const uploadAvatar = require('../../../config/cloudinary/cloudinaryConfig').uploadAvatar;
 const { mongooseToObject } = require('../../../utils/mongoose');
 const cloudinary = require('cloudinary').v2;
 
@@ -11,7 +11,7 @@ class SettingController {
     }
     // Cập nhật thông tin chung và avatar
     updateGeneral(req, res, next) {
-        upload.single('avatar')(req, res,async function (err) {
+        uploadAvatar.single('avatar')(req, res,async function (err) {
         try {
             const { username, name } = req.body;
             const avatarUrl = req.file ? req.file.path : null;

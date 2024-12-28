@@ -178,7 +178,7 @@ class AuthController{
             const userId = req.user._id;
             const verified = await UserService.verifyToken(userId, token);
             if (verified) {
-                req.user.authenByCode = true;
+                req.session.authenByCode = true;
                 console.log('User authenticated, session authenticated set:', req.session.authenticated);
                 res.status(200).json('Verification is successful');
             } else {
