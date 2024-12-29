@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${account.registrationTime}</td>
                 <td>${account.status}</td>
                 <td>
-                    <a href="#" class="btn btn-sm btn-primary">Xem</a>
+                    <a class="btn btn-sm btn-primary" href="/account/details/${account.username}">Xem</a>
 
                     <a href="#" class="btn btn-sm ${account.status !='active' ? 'btn-success' : 'btn-danger'} ban-button" data-bs-toggle="modal" data-status="${account.status}" data-token="${account.token}" data-name="{{this.username}}" data-bs-target=${account.status !='active' ? '#unban-account-modal' : '#ban-account-modal'}> ${account.status !='active' ? 'Mở khóa' : 'Khóa'}</a>
                 </td>

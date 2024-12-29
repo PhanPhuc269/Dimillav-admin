@@ -31,8 +31,9 @@ class AccountService {
         // Tạo token cho mỗi tài khoản
         const accountsWithToken = result.docs.map((account) => {
             const token = jwt.sign({ id: account._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const { password, __v, secretKey, _id, ...accountData } = account.toObject(); // Loại bỏ thuộc tính password và __v
             return {
-                ...account.toObject(),
+                ...accountData,
                 token, // Thêm token vào tài khoản
             };
         });
@@ -140,6 +141,13 @@ class AccountService {
             console.error('Service Error:', error);
             throw new Error('Failed to unban accounts.');
         }
+    }
+    async getAccountDetailsByUsername(username) {
+        const account = await User.findOne({ username }).select('-password -__v -secretKey');
+        if (!account) {
+            throw new Error('Account not found');
+        }
+        return account;
     }
 }
 

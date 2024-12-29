@@ -124,6 +124,31 @@ class AccountController{
             return res.status(500).json({ message: 'Internal server error.' });
         }
     };
+    async viewAccountDetails(req, res, next) {
+        try {
+            const { username } = req.params; // Lấy username từ URL
+            if (!username) {
+                return res.status(400).json({ error: 'Username is required' });
+            }
+
+            // Gọi service để lấy thông tin chi tiết tài khoản
+            const account = await accountService.getAccountDetailsByUsername(username);
+            
+            // Trả về dữ liệu cho client
+            return res.render('view-account-detail',{ account: mongooseToObject(account) });
+        } catch (error) {
+            console.error('Error fetching account details:', error.message);
+
+            // Nếu tài khoản không tìm thấy
+            if (error.message === 'Account not found') {
+                return res.status(404).json({ error: 'Account not found' });
+            }
+
+            // Xử lý lỗi khác
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        
+    }
 }
 
 module.exports = new AccountController();

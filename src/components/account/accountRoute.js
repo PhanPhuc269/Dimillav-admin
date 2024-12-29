@@ -27,6 +27,7 @@ router.post('/ban-account', accountController.banAccount);
 router.post('/bulk-ban', accountController.banAccountList); 
 router.post('/unban-account', accountController.unbanAccount);
 router.post('/bulk-unban', accountController.unbanAccountList);
+router.get('/details/:username', accountController.viewAccountDetails);
 
 
 
