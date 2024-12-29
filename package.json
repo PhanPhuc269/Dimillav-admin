@@ -46,6 +46,7 @@
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.3",
     "mongoose-delete": "^1.0.2",
+    "mongoose-paginate-v2": "^1.8.5",
     "mongoose-sequence": "^6.0.1",
     "mongoose-slug-generator": "^1.0.4",
     "mongoose-slug-updater": "^3.3.0",

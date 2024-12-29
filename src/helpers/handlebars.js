@@ -25,12 +25,13 @@ module.exports={
       const icon = icons[sortType];
       const type = types[sortType];
 
+
       const href = Handlebars.escapeExpression(`?_sort&column=${field}&type=${type}`);
 
-      const output = `<a href="?_sort&column=${field}&type=${type}">
-        <i class="${icon}"></i>
-      </a>`;
-        return new Handlebars.SafeString(output);
+      const output = `<a href="${href}" data-field="${field}" data-type="${type}">
+          <i class="${icon}"></i>
+        </a>`;
+      return new Handlebars.SafeString(output);
     },
 
     eq: (a, b) => a === b,

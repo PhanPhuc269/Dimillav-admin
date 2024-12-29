@@ -1,7 +1,8 @@
 // models/Admin.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const { google } = require('googleapis');
+const mongoosePaginate = require('mongoose-paginate-v2');
+
 
 const AdminSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
@@ -14,12 +15,18 @@ const AdminSchema = new mongoose.Schema({
     phone: { type: String },
     facebook: { type: String },
     name: { type: String },
+    status: { type: String, default: 'active' },
     secretKey: {
         type: String,
         default: null,
     }
 
+}, {
+    timestamps: true // Tự động thêm createdAt và updatedAt
 });
+
+AdminSchema.plugin(mongoosePaginate);
+
 
 AdminSchema.pre('save', async function(next) {
     if (!this.isModified('password')) {

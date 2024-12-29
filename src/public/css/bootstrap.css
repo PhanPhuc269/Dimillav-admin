@@ -1507,7 +1507,7 @@ progress {
   font-weight: 400;
   line-height: 1.5;
   color: #6C7293;
-  background-color: #ededed;
+  background-color: #fbfbff;
   background-clip: padding-box;
   border: 1px solid #000000;
   appearance: none;
@@ -2097,7 +2097,8 @@ textarea.form-control-lg {
 
 .btn-primary {
   color: #fff;
-  background-color: #EB1616;
+  /* background-color: #EB1616; */
+  background-color: #1c91f1;
   border-color: #EB1616; }
   .btn-primary:hover {
     color: #fff;
