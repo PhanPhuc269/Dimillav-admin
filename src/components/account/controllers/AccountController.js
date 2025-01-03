@@ -2,16 +2,19 @@ const { mutipleMongooseToObject } = require('@utils/mongoose');
 const { mongooseToObject } = require('@utils/mongoose');
 const session = require('express-session');
 const accountService = require('../services/AccountService');
-
+const OrderService = require('../services/OrderService');
 
 class AccountController{
     async viewAccounts(req, res, next) {
         try {
-            const { query, page, limit } = req.query;
+            const { query, page, limit, role } = req.query;
             const sortField = res.locals._sort.column || 'name';
             const sortOrder = res.locals._sort.type || 'asc';
-            const accounts = await accountService.getAccounts(query, page, limit, sortField, sortOrder);
+            const accounts = await accountService.getAccounts(query, page, limit, role, sortField, sortOrder);
 
+            if (accounts.totalPages<page) {
+                res.render('view-accounts', { accounts: (accounts.docs), query, page: 1 ,totalPages: accounts.totalPages, sortField, sortOrder });
+            }
             if (req.xhr) {
                 return res.json({
                     accounts: accounts.docs,
@@ -133,9 +136,15 @@ class AccountController{
 
             // Gọi service để lấy thông tin chi tiết tài khoản
             const account = await accountService.getAccountDetailsByUsername(username);
+
+            const orders = await OrderService.getOrdersByCustomerId(account._id);
             
             // Trả về dữ liệu cho client
-            return res.render('view-account-detail',{ account: mongooseToObject(account) });
+            return res.render('view-account-detail',
+                { account: mongooseToObject(account), 
+                orders: mutipleMongooseToObject(orders),
+
+             });
         } catch (error) {
             console.error('Error fetching account details:', error.message);
 
@@ -149,6 +158,37 @@ class AccountController{
         }
         
     }
+    async ViewOrderList(req, res, next) {
+        try {
+            const customerId = req.user._id;
+            console.log('user: ', customerId);
+            const orders = await OrderService.getOrdersByCustomerId(customerId);
+            res.render('orderList', {
+                orders: mutipleMongooseToObject(orders),
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async ViewOrderDetail(req, res, next) {
+        try {
+            const orderId = req.params._id;
+            const order = await OrderService.getOrderDetails(orderId);
+
+            if (!order) {
+                return res.status(404).send('Không tìm thấy đơn hàng.');
+            }
+
+            res.render('orderDetail', {
+                order: mongooseToObject(order),
+            });
+        } catch (error) {
+            console.error('Error fetching order details:', error);
+            res.status(500).send('Lỗi server.');
+        }
+    }
+
 }
 
 module.exports = new AccountController();

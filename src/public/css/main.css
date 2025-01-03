@@ -6158,3 +6158,12 @@ background: #fff;
   background-color: white; /* Đảm bảo tùy chọn hiển thị màu trắng */
   color: black;
 }
+.avatar-img {
+  width: 150px; /* Set the desired width */
+  height: 150px; /* Set the desired height */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+  border-radius: 50%; /* Optional: make the image circular */
+}
+.top-71{
+  top: 71px !important;
+}

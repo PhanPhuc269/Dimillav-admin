@@ -4,11 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const nextPageButton = document.getElementById('next-page');
     const actionButton = document.querySelector('.check-all-submit-btn');
     const selectAllOptions = document.querySelector('.select-all-options');
-    const accountTableBody = document.getElementById('account-table-body');
-    
+    const selectRole = document.querySelector('.select-role');
 
+    const accountTableBody = document.getElementById('account-table-body');
+    const pageInfo = document.getElementById('page-info');
+    
     let currentPage = 1;
     let currentFilters = {}; // Lưu trữ bộ lọc hiện tại
+    const totalPages = parseInt(pageInfo.getAttribute('data-total-pages'), 10);
 
     updateCurrentFiltersFromURL();
     function updateCurrentFiltersFromURL() {
@@ -26,27 +29,81 @@ document.addEventListener('DOMContentLoaded', function () {
         currentFilters = queryParams;
     }
     
+    // Cập nhật search box và selectRole dựa trên URL
+    function updateFiltersFromURL() {
+        const currentUrl = new URL(window.location.href);
+
+        // Cập nhật giá trị cho ô tìm kiếm
+        const query = currentUrl.searchParams.get('query');
+        if (query) {
+            document.getElementById('search-query').value = query;
+            currentFilters.query = query;
+        } else {
+            document.getElementById('search-query').value = '';
+            delete currentFilters.query;
+        }
+
+        // Cập nhật giá trị cho selectRole
+        const selectedRole = currentUrl.searchParams.get('role');
+        if (selectedRole) {
+            selectRole.value = selectedRole;
+            currentFilters.role = selectedRole;
+        } else {
+            selectRole.value = '';
+            delete currentFilters.role;
+        }
+
+        // Cập nhật giá trị cho trang
+        const page = currentUrl.searchParams.get('page');
+        if (page) {
+            currentPage = parseInt(page, 10);
+        } else {
+            currentPage = 1;
+        }
+    }
+
+    // Gọi hàm để cập nhật ô tìm kiếm và selectRole khi trang được tải
+    updateFiltersFromURL();
+
+    // Khi selectRole thay đổi
+    selectRole.addEventListener('change', function () {
+        const selectedRole = selectRole.value; // Lấy giá trị role được chọn
+        if (selectedRole) {
+            currentFilters.role = selectedRole; // Cập nhật bộ lọc role
+        } else {
+            delete currentFilters.role; // Xóa bộ lọc role nếu không chọn gì
+        }
+        currentFilters.page = 1; // Reset về trang đầu tiên
+        fetchAccounts(currentFilters); // Gọi lại dữ liệu với bộ lọc mới
+    });
 
     // Tìm kiếm
     searchButton.addEventListener('click', function () {
         const query = document.getElementById('search-query').value;
+        currentFilters.page = 1; // Reset trang về trang 1
         fetchAccounts({ query });
     });
 
-    // Chuyển trang
     prevPageButton.addEventListener('click', function () {
-        fetchAccounts({ page: currentPage - 1 });
+        currentPage = parseInt(currentPage, 10);
+        if (currentPage > 1) {
+            fetchAccounts({ page: currentPage - 1 });
+        }
     });
-
+    
     nextPageButton.addEventListener('click', function () {
-        fetchAccounts({ page: currentPage + 1 });
+        currentPage = parseInt(currentPage, 10);
+        if (currentPage < totalPages) {
+            fetchAccounts({ page: currentPage + 1 });
+        }
     });
 
     // Hành động hàng loạt
     actionButton.addEventListener('click', function () {
         const action = selectAllOptions.value;
         if (!action) {
-            alert('Vui lòng chọn hành động.');
+            showToast('Vui lòng chọn hành động.', 'warning', 'Warning');
+
             return;
         }
 
@@ -56,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ).map(checkbox => checkbox.dataset.token);
 
         if (selectedTokens.length === 0) {
-            alert('Vui lòng chọn ít nhất một tài khoản.');
+            showToast('Vui lòng chọn ít nhất một tài khoản.', 'warning', 'Warning');
             return;
         }
 
@@ -67,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if(action === 'unblock') {
             performBulkUnBan(selectedTokens);
         } else {
-            alert('Hành động không hợp lệ.');
+            showToast('Hành động không hợp lệ.', 'error', 'Error');
         }
         fetchAccounts(currentFilters);
     });
@@ -116,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 updateSortIcons(data.sortField, data.sortOrder);
             });
         checkAllSubmitBtn.addClass('disabled');
+        totalPages = parseInt(pageInfo.getAttribute('data-total-pages'), 10);
     }
 
 
@@ -132,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${account.registrationTime}</td>
                 <td>${account.status}</td>
                 <td>
-                    <a class="btn btn-sm btn-primary" href="/account/details/${account.username}">Xem</a>
+                    <a class="btn btn-sm btn-info" href="/account/details/${account.username}">Xem</a>
 
                     <a href="#" class="btn btn-sm ${account.status !='active' ? 'btn-success' : 'btn-danger'} ban-button" data-bs-toggle="modal" data-status="${account.status}" data-token="${account.token}" data-name="{{this.username}}" data-bs-target=${account.status !='active' ? '#unban-account-modal' : '#ban-account-modal'}> ${account.status !='active' ? 'Mở khóa' : 'Khóa'}</a>
                 </td>
@@ -205,14 +263,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (response.ok) {
-                alert('Account successfully banned.');
+                showToast('Account successfully banned.', 'success', 'Success');
+
                 fetchAccounts({ page: currentPage });
             } else {
-                alert(`Error banning account: ${result.message}`);
+                showToast('Failed to ban account.', 'error', 'Error');
             }
         } catch (error) {
             console.error('Error banning account:', error);
-            alert('Failed to ban account.');
+            showToast('Failed to ban account.', 'error', 'Error');
         }
     }
     async function unbanAccount(token) {
@@ -225,14 +284,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const result = await response.json();
             if (response.ok) {
-                alert('Account successfully unbanned.');
+                showToast('Account successfully unbanned.', 'success', 'Success');
                 fetchAccounts({ page: currentPage });
             } else {
-                alert(`Error unbanning account: ${result.message}`);
+                showToast('Failed to unban account.', 'error', 'Error');
             }
         } catch (error) {
             console.error('Error unbanning account:', error);
-            alert('Failed to ban account.');
+            showToast('Failed to unban account.', 'error', 'Error');
         }
     }
     var checkboxAll=$('#checkbox-all');
@@ -283,16 +342,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Tài khoản đã được khóa thành công.');
+                    showToast('Tài khoản đã được khóa thành công.', 'success', 'Success');
                     fetchAccounts(); // Cập nhật lại danh sách
                 }
                 else {
-                    alert('Không thể khóa tài khoản: ' + response.data.message);
+                    showToast('Không thể khóa tài khoản: ' + response.data.message, 'error', 'Error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Có lỗi xảy ra khi khóa tài khoản.');
+                showToast('Có lỗi xảy ra khi khóa tài khoản.', 'error', 'Error');
             });
     }
    // Hàm khóa hàng loạt tài khoản
@@ -307,16 +366,16 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => {
                 if (response.ok) {
-                    alert('Tài khoản đã được khóa thành công.');
+                    showToast('Tài khoản đã được mở khóa thành công.', 'success', 'Success');
                     fetchAccounts(); // Cập nhật lại danh sách
                 }
                 else {
-                    alert('Không thể khóa tài khoản: ' + response.data.message);
+                    showToast('Không thể khóa tài khoản: ' + response.data.message, 'error', 'Error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Có lỗi xảy ra khi khóa tài khoản.');
+                showToast('Có lỗi xảy ra khi khóa tài khoản.', 'error', 'Error');
             });
     }
     // Hàm xóa hàng loạt tài khoản
@@ -332,15 +391,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('Tài khoản đã được xóa thành công.');
+                    showToast('Tài khoản đã được xóa thành công.', 'success', 'Success');
                     fetchAccounts(); // Cập nhật lại danh sách
                 } else {
-                    alert('Không thể xóa tài khoản: ' + data.message);
+                    showToast('Không thể xóa tài khoản: ' + data.message, 'error', 'Error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Có lỗi xảy ra khi xóa tài khoản.');
+                showToast('Có lỗi xảy ra khi xóa tài khoản.', 'error', 'Error');
             });
     }
 });

@@ -4,19 +4,25 @@
         <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Account management</h6>
             <div class="d-flex">
+                <select class="form-control-sm form-select w-50 select-role ms-5" aria-label="Default select example" name="action" required>
+                    <option value="">Chức vụ</option>
+					<option value="admin">Admin</option>
+					<option value="customer">Khách hàng</option>
+				</select>
                 <input type="text" id="search-query" class="form-control bg-dark border-0 me-2" placeholder="Search by name or email">
                 <button id="search-button" class="btn btn-primary">Search</button>
             </div>
         </div>
         <div class="table-responsive">
 			<div class="d-flex align-items-center mb-2">
-				<select class="form-control-sm select-all-options me-2" aria-label="Default select example" name="action" required>
+				<select class="form-control-sm form-select w-25 select-all-options me-2" aria-label="Default select example" name="action" required>
 					<option value="">------Hành động------</option>
 					<option value="delete">Xóa</option>
 					<option value="block">Khóa</option>
 					<option value="unblock">Mở khóa</option>
 				</select>
 				<button class="btn btn-primary  btm-sm disabled check-all-submit-btn">Thực hiện</button>
+                
 			</div>
 			<table class="table text-start align-middle table-bordered table-hover mb-0">
                 <thead>
@@ -42,7 +48,7 @@
                         <td>{{this.registrationTime}}</td>
                         <td>{{this.status}}</td>
                         <td>
-                            <a class="btn btn-sm btn-primary" href="/account/details/{{this.username}}">Xem</a>
+                            <a class="btn btn-sm btn-info text-white" href="/account/details/{{this.username}}">Xem</a>
 							{{#if (eq this.status 'active')}}
                             	<a href="#" class="btn btn-sm btn-danger ban-button" data-bs-toggle="modal" data-token="{{this.token}}" data-name="{{this.username}}" data-bs-target="#ban-account-modal">Khóa</a>
 							{{else}}
@@ -56,7 +62,7 @@
         </div>
         <div class="d-flex justify-content-between mt-3">
             <button id="prev-page" class="btn btn-secondary">Previous</button>
-            <span class="pagination-info">Page {{page}} of {{totalPages}}</span>
+            <span class="pagination-info" id="page-info" data-total-pages="{{totalPages}}">Page {{page}} of {{totalPages}}</span>
             <button id="next-page" class="btn btn-secondary">Next</button>
         </div>
     </div>

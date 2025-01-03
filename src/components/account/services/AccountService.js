@@ -1,45 +1,80 @@
-const User = require('@components/auth/models/Admin');
+const Admin = require('@components/auth/models/Admin');
+const Customer = require('@components/auth/models/Customer');
 const fs = require('fs');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 class AccountService {
-    async getAccounts(query, page=1, limit=3, sortField, sortOrder) {
-        const searchQuery = query ? {
-            $or: [
-                { name: new RegExp(query, 'i') },
-                { email: new RegExp(query, 'i') }
-            ]
-        } : {};
-
+    async getAccounts(query, page = 1, limit = 3, role, sortField, sortOrder) {
+        const searchQuery = query
+            ? {
+                  $or: [
+                      { name: new RegExp(query, 'i') },
+                      { email: new RegExp(query, 'i') },
+                  ],
+              }
+            : {};
+    
         // Đặt giá trị mặc định cho sortField nếu không xác định
         const validSortFields = ['name', 'email', 'registrationTime'];
         if (!validSortFields.includes(sortField)) {
             sortField = 'name'; // Giá trị mặc định
         }
-
-        const options = {
-            page: parseInt(page, 10) || 1,
-            limit: parseInt(limit, 10) || 10,
-            sort: { [sortField]: sortOrder === 'desc' ? -1 : 1 } // Sắp xếp theo trường và thứ tự
-        };
         
-        const result = await User.paginate(searchQuery, options);
-
-
+        // Lấy Admin và Customer dựa trên role
+        let admins = [];
+        let customers = [];
+        if (!role || role === 'admin') {
+            admins = await Admin.find(searchQuery).exec(); // Chỉ lấy Admin nếu không có role hoặc role = 'admin'
+        }
+        if (!role || role === 'customer') {
+            customers = await Customer.find(searchQuery).exec(); // Chỉ lấy Customer nếu không có role hoặc role = 'customer'
+        }
+    
+        // Hợp nhất danh sách Admin và Customer
+        const combinedAccounts = [...admins, ...customers];
+    
+        // Sắp xếp danh sách
+        combinedAccounts.sort((a, b) => {
+            const valueA = a[sortField]?.toString().toLowerCase() || '';
+            const valueB = b[sortField]?.toString().toLowerCase() || '';
+            if (valueA < valueB) return sortOrder === 'desc' ? 1 : -1;
+            if (valueA > valueB) return sortOrder === 'desc' ? -1 : 1;
+            return 0;
+        });
+    
+        // Tính toán phân trang
+        const totalDocs = combinedAccounts.length;
+        const totalPages = Math.ceil(totalDocs / limit);
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+        const paginatedAccounts = combinedAccounts.slice(startIndex, endIndex);
+    
         // Tạo token cho mỗi tài khoản
-        const accountsWithToken = result.docs.map((account) => {
-            const token = jwt.sign({ id: account._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            const { password, __v, secretKey, _id, ...accountData } = account.toObject(); // Loại bỏ thuộc tính password và __v
+        const accountsWithToken = paginatedAccounts.map((account) => {
+            const token = jwt.sign(
+                { id: account._id, role: account instanceof Admin ? 'admin' : 'customer' },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
+            const { password, __v, secretKey, _id, ...accountData } = account.toObject(); // Loại bỏ thuộc tính không cần thiết
             return {
                 ...accountData,
                 token, // Thêm token vào tài khoản
+                role: account instanceof Admin ? 'admin' : 'customer', // Đánh dấu role
             };
         });
-
-        return { ...result, docs: accountsWithToken }; // Trả về danh sách kèm token
+    
+        return {
+            totalDocs, // Tổng số tài khoản
+            totalPages, // Tổng số trang
+            page, // Trang hiện tại
+            limit, // Số lượng mỗi trang
+            docs: accountsWithToken, // Danh sách tài khoản đã phân trang
+        };
     }
+    
     async banAccount(token, reason) {
         try {
             // Giải mã token để lấy ID tài khoản
@@ -47,7 +82,7 @@ class AccountService {
             const accountId = decoded.id;
     
             // Tìm tài khoản trong cơ sở dữ liệu
-            const account = await User.findById(accountId);
+            const account = await Customer.findById(accountId);
     
             if (!account) {
                 return { success: false, message: 'Account not found.' };
@@ -80,7 +115,7 @@ class AccountService {
             });
     
             // Cập nhật trạng thái cho danh sách tài khoản
-            const result = await User.updateMany(
+            const result = await Customer.updateMany(
                 { _id: { $in: accountIds } },
                 { status: 'banned', banReason: reason || 'No reason provided' }
             );
@@ -98,7 +133,7 @@ class AccountService {
             const accountId = decoded.id;
     
             // Tìm tài khoản trong cơ sở dữ liệu
-            const account = await User.findById(accountId);
+            const account = await Customer.findById(accountId);
     
             if (!account) {
                 return { success: false, message: 'Account not found.' };
@@ -131,7 +166,7 @@ class AccountService {
             });
     
             // Cập nhật trạng thái cho danh sách tài khoản
-            const result = await User.updateMany(
+            const result = await Customer.updateMany(
                 { _id: { $in: accountIds } },
                 { status: 'active', banReason: null }
             );
@@ -143,11 +178,13 @@ class AccountService {
         }
     }
     async getAccountDetailsByUsername(username) {
-        const account = await User.findOne({ username }).select('-password -__v -secretKey');
-        if (!account) {
+        const account = await Customer.findOne({ username }).select('-password -__v -secretKey');
+        const admin = await Admin.findOne({ username }).select('-password -__v -secretKey');
+
+        if (!account && !admin) {
             throw new Error('Account not found');
         }
-        return account;
+        return account || admin;
     }
 }
 

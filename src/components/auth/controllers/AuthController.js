@@ -196,7 +196,7 @@ class AuthController{
             if (err) {
                 return res.status(500).send('Error logging out');
             }
-            res.redirect('/login'); // Chuyển hướng về trang đăng nhập
+            res.redirect('/auth/login'); // Chuyển hướng về trang đăng nhập
         });
     };
 
