@@ -3,8 +3,6 @@ const User = require('@components/auth/models/User');
 const { mutipleMongooseToObject } = require('../utils/mongoose');
 const { mongooseToObject } = require('../utils/mongoose');
 
-
-
 module.exports={
     sum: (a, b) => a + b,
     sortable: (field, sort) => {
@@ -76,5 +74,5 @@ module.exports={
     not : (value) => {
       return !value;
     },
-    
+    // Removed any status-related helpers
 }

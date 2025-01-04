@@ -16,21 +16,22 @@ const Product = new Schema({
     rate:{type: Number},
     slug: { type: String, unique: true },
     quantity: { type: Number, default: 0 }, // Thêm trường số lượng
+    // Removed status field
 });
 
 Product.pre('save', async function (next) {
     if (this.isModified('name')) {
       let slug = slugify(this.name, { lower: true, strict: true });
-  
+
       // Ensure uniqueness of the slug
       const slugRegex = new RegExp(`^${slug}(-[0-9]*$)?`, 'i');
       const existingProduct = await this.constructor.findOne({ slug: slugRegex });
-  
+
       if (existingProduct) {
         const slugSuffix = Date.now();
         slug = `${slug}-${slugSuffix}`;
       }
-  
+
       this.slug = slug;
     }
     next();
