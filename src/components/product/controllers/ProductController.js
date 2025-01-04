@@ -28,13 +28,13 @@ class ProductController {
         }
     }
 
-    // Lọc sản phẩm
+    // Lọc sản phẩm và render giao diện
     async getFilteredProducts(req, res, next) {
         try {
             const {
-                type: productType,
+                category: productCategory,
                 brand: productBrand,
-                color: productColor,
+                name: productName,
                 minPrice,
                 maxPrice,
                 page = 1,
@@ -46,23 +46,26 @@ class ProductController {
             const skip = (parseInt(page) - 1) * parseInt(limit);
             const filters = {};
 
-            if (keyword) {
-                filters.name = { $regex: keyword, $options: 'i' };
+            if (keyword || productName) {
+                filters.name = { $regex: keyword || productName, $options: 'i' };
             }
 
-            if (productType) {
-                const typeArray = productType.includes(',') ? productType.split(',') : [productType];
-                filters.type = { $in: typeArray };
+            if (productCategory) {
+                const categoryArray = Array.isArray(productCategory)
+                    ? productCategory
+                    : productCategory.includes(',')
+                        ? productCategory.split(',')
+                        : [productCategory];
+                filters.category = { $in: categoryArray };
             }
 
             if (productBrand) {
-                const brandArray = productBrand.includes(',') ? productBrand.split(',') : [productBrand];
+                const brandArray = Array.isArray(productBrand)
+                    ? productBrand
+                    : productBrand.includes(',')
+                        ? productBrand.split(',')
+                        : [productBrand];
                 filters.brand = { $in: brandArray };
-            }
-
-            if (productColor) {
-                const colorArray = productColor.includes(',') ? productColor.split(',') : [productColor];
-                filters.color = { $in: colorArray };
             }
 
             if (minPrice || maxPrice) {
@@ -82,21 +85,37 @@ class ProductController {
                 case 'creation_time_desc':
                     sortCriteria = { createdAt: -1 };
                     break;
-                case 'rate_desc':
-                    sortCriteria = { rate: -1 };
+                case 'creation_time_asc':
+                    sortCriteria = { createdAt: 1 };
+                    break;
+                case 'total_purchase_desc':
+                    sortCriteria = { totalPurchase: -1 };
                     break;
                 default:
-                    sortCriteria = {};
+                    sortCriteria = { createdAt: -1 };
             }
 
             const total = await ProductService.countProducts(filters);
             const products = await ProductService.getProductList(filters, sortCriteria, skip, parseInt(limit));
 
-            res.json({
+            // Fetch distinct categories and brands
+            const categories = await ProductService.getAllCategories();
+            const brands = await ProductService.getAllBrands();
+
+            res.render('list', { // Changed from res.json to res.render
                 products: mutipleMongooseToObject(products),
                 total,
                 currentPage: parseInt(page),
                 totalPages: Math.ceil(total / limit),
+                keyword,
+                sort,
+                formData: {
+                    category: productCategory,
+                    brand: productBrand,
+                    name: productName,
+                },
+                categories: categories,
+                brands: brands,
             });
         } catch (error) {
             console.error('Error filtering products:', error);
@@ -127,12 +146,18 @@ class ProductController {
             const total = await ProductService.countProducts(filters);
             const products = await ProductService.getProductList(filters, sortCriteria, skip, limit);
 
+            // Fetch distinct categories and brands
+            const categories = await ProductService.getAllCategories();
+            const brands = await ProductService.getAllBrands();
+
             res.render('list', {
                 products: mutipleMongooseToObject(products),
                 currentPage: page,
                 totalPages: Math.ceil(total / limit),
                 keyword,
                 sort,
+                categories: categories,
+                brands: brands,
             });
         } catch (error) {
             next(error);
@@ -423,6 +448,7 @@ class ProductController {
                     brand,
                     color,
                     image: imagePath,
+                    createdAt: new Date(),
                 });
 
                 await ProductService.saveProduct(newProduct);

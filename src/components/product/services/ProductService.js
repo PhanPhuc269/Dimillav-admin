@@ -73,6 +73,18 @@ class ProductService {
         }
     }
 
+    // Add method to get distinct categories
+    async getAllCategories() {
+        console.log('getAllCategories called'); // Debugging log
+        return await Product.distinct('category');
+    }
+
+    // Add method to get distinct brands
+    async getAllBrands() {
+        console.log('getAllBrands called'); // Debugging log
+        return await Product.distinct('brand');
+    }
+
     // Removed category and manufacturer related methods
     // async getAllCategories() { ... }
     // async addCategory(name) { ... }
@@ -83,6 +95,8 @@ class ProductService {
 }
 
 module.exports = new ProductService();
+
+
 
 
 

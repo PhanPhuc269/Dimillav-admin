@@ -1,3 +1,4 @@
+const { create } = require('express-handlebars');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slugify = require('slugify');
@@ -16,6 +17,8 @@ const Product = new Schema({
     rate:{type: Number},
     slug: { type: String, unique: true },
     quantity: { type: Number, default: 0 }, // Thêm trường số lượng
+    totalPurchase: { type: Number, default: 0 }, 
+    createdAt: { type: Date, default: Date.now },
     // Removed status field
 });
 

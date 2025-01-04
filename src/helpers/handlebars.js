@@ -74,5 +74,11 @@ module.exports={
     not : (value) => {
       return !value;
     },
+    includes: (array, value) => {
+        if (Array.isArray(array)) {
+            return array.includes(value);
+        }
+        return false;
+    },
     // Removed any status-related helpers
 }
