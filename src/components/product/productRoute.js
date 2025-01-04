@@ -16,7 +16,8 @@ router.delete('/:slug/image', productController.removeImage);
 router.patch('/:slug/category-brand', productController.changeCategoryOrBrand);
 router.patch('/:slug/availability', productController.updateAvailability);
 
-
+// Add AJAX route for fetching products
+router.get('/api/products', productController.getProductsAjax);
 
 router.get('/create', productController.createProductForm);
 router.post('/create', productController.createProduct);

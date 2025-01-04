@@ -481,6 +481,88 @@ class ProductController {
             res.status(500).json({ message: 'Error deleting product', error });
         }
     }
+
+    // New method to handle AJAX requests for products
+    async getProductsAjax(req, res, next) {
+        try {
+            const {
+                category: productCategory,
+                brand: productBrand,
+                name: productName,
+                minPrice,
+                maxPrice,
+                page = 1,
+                limit = 12,
+                keyword,
+                sort,
+            } = req.query;
+
+            const skip = (parseInt(page) - 1) * parseInt(limit);
+            const filters = {};
+
+            if (keyword || productName) {
+                filters.name = { $regex: keyword || productName, $options: 'i' };
+            }
+
+            if (productCategory) {
+                const categoryArray = Array.isArray(productCategory)
+                    ? productCategory
+                    : productCategory.includes(',')
+                        ? productCategory.split(',')
+                        : [productCategory];
+                filters.category = { $in: categoryArray };
+            }
+
+            if (productBrand) {
+                const brandArray = Array.isArray(productBrand)
+                    ? productBrand
+                    : productBrand.includes(',')
+                        ? productBrand.split(',')
+                        : [productBrand];
+                filters.brand = { $in: brandArray };
+            }
+
+            if (minPrice || maxPrice) {
+                filters.price = {};
+                if (minPrice) filters.price.$gte = parseFloat(minPrice);
+                if (maxPrice) filters.price.$lte = parseFloat(maxPrice);
+            }
+
+            let sortCriteria = {};
+            switch (sort) {
+                case 'price_asc':
+                    sortCriteria = { price: 1 };
+                    break;
+                case 'price_desc':
+                    sortCriteria = { price: -1 };
+                    break;
+                case 'creation_time_desc':
+                    sortCriteria = { createdAt: -1 };
+                    break;
+                case 'creation_time_asc':
+                    sortCriteria = { createdAt: 1 };
+                    break;
+                case 'total_purchase_desc':
+                    sortCriteria = { totalPurchase: -1 };
+                    break;
+                default:
+                    sortCriteria = { createdAt: -1 };
+            }
+
+            const total = await ProductService.countProducts(filters);
+            const products = await ProductService.getProductList(filters, sortCriteria, skip, parseInt(limit));
+
+            res.json({
+                products: mutipleMongooseToObject(products),
+                total,
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(total / limit),
+            });
+        } catch (error) {
+            console.error('Error in getProductsAjax:', error);
+            res.status(500).json({ message: 'Error fetching products', error });
+        }
+    }
 }
 
 module.exports = new ProductController();
