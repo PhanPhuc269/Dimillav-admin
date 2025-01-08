@@ -1,8 +1,7 @@
 const Product = require('../models/Product');
-
-
-
-
+// Removed Category and Manufacturer dependencies
+// const Category = require('../models/Category'); 
+// const Manufacturer = require('../models/Manufacturer'); 
 
 class ProductService {
 
@@ -64,9 +63,40 @@ class ProductService {
     async saveProduct(product) {
         return product.save();
     }
+
+    // Add deleteProduct method
+    async deleteProduct(slug) {
+        try {
+            return await Product.deleteOne({ slug });
+        } catch (error) {
+            throw new Error("Error deleting product: " + error.message);
+        }
+    }
+
+    // Add method to get distinct categories
+    async getAllCategories() {
+        console.log('getAllCategories called'); // Debugging log
+        return await Product.distinct('category');
+    }
+
+    // Add method to get distinct brands
+    async getAllBrands() {
+        console.log('getAllBrands called'); // Debugging log
+        return await Product.distinct('brand');
+    }
+
+    // Removed category and manufacturer related methods
+    // async getAllCategories() { ... }
+    // async addCategory(name) { ... }
+    // async deleteCategory(id) { ... }
+    // async getAllManufacturers() { ... }
+    // async addManufacturer(name) { ... }
+    // async deleteManufacturer(id) { ... }
 }
 
 module.exports = new ProductService();
+
+
 
 
 
