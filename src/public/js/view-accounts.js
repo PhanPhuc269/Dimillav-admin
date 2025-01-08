@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error banning account:', error);
-            showToast('Failed to ban account.', 'error', 'Error');
+           // showToast('Failed to ban account.', 'error', 'Error');
         }
     }
     async function unbanAccount(token) {
@@ -291,7 +291,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } catch (error) {
             console.error('Error unbanning account:', error);
-            showToast('Failed to unban account.', 'error', 'Error');
+           // showToast('Failed to unban account.', 'error', 'Error');
         }
     }
     var checkboxAll=$('#checkbox-all');

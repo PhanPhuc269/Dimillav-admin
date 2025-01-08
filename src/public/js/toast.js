@@ -31,9 +31,10 @@ function showToast(message, type = 'info', title = 'Notification', delay = 3000)
   const newToast = document.getElementById(toastId);
   const toastInstance = new bootstrap.Toast(newToast);
   toastInstance.show();
-
+  //console.log('Toast đã bị ẩn:', toastId);
   // Xóa Toast khi ẩn
   newToast.addEventListener('hidden.bs.toast', () => {
+    console.log('Toast đã bị ẩn:', toastId);
       newToast.remove();
   });
 }

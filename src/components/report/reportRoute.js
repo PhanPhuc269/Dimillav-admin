@@ -3,10 +3,16 @@ const router =express.Router();
 const orderController=require('./controllers/ReportController');
 const {ensureAuthenticated} = require('../../middlewares/AuthMiddleware');
 const reportController = require('./controllers/ReportController');
-// Báo cáo doanh thu
-router.get('/revenue', reportController.viewRevenueReport);
+
+
+router.get('/revenue', reportController.viewAnnualRevenueReport);
+
+router.get('/sales', reportController.viewAnnualSalesReport);
+
 
 // Báo cáo sản phẩm top doanh thu
-router.get('/topProducts', reportController.viewTopRevenueProducts);
+router.get('/topProducts', reportController.viewTopProductsReport);
+
+
 
 module.exports = router;
