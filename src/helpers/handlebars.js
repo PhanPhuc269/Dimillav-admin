@@ -77,5 +77,11 @@ module.exports={
     not : (value) => {
       return !value;
     },
-    
+    yearsRange: (startYear, endYear) => {
+      let years = [];
+      for (let i = startYear; i <= endYear; i++) {
+          years.push(i);
+      }
+      return years;
+  },
 }

@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
             labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
             datasets: [{
                     label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
+                    data: [99, 131, 130, 160, 180, 150, 200],
                     backgroundColor: "rgba(235, 22, 22, .7)",
                     fill: true
                 },
@@ -224,5 +224,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    
+
+    var ctx10 = $("#salse-revenueTemp").get(0).getContext("2d");
+    var myChart10 = new Chart(ctx10, {
+        type: "line",
+        data: {
+            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+            datasets: [{
+                    label: "Salse",
+                    data: [15, 30, 55, 45, 70, 65, 85],
+                    backgroundColor: "rgba(235, 22, 22, .7)",
+                    fill: true
+                },
+                {
+                    label: "Revenue",
+                    data: [99, 135, 170, 130, 190, 180, 270],
+                    backgroundColor: "rgba(235, 22, 22, .5)",
+                    fill: true
+                }
+            ]
+            },
+        options: {
+            responsive: true
+        }
+    });
     
 })(jQuery);
