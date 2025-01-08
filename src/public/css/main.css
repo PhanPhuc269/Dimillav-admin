@@ -6159,6 +6159,7 @@ background: #fff;
   color: black;
 }
 
+
 body {
   font-family: Arial, sans-serif;
 }
@@ -6226,4 +6227,14 @@ th {
   width: 15px;
   height: 15px;
   border-radius: 3px;
+
+.avatar-img {
+  width: 150px; /* Set the desired width */
+  height: 150px; /* Set the desired height */
+  object-fit: cover; /* Maintain aspect ratio and cover the area */
+  border-radius: 50%; /* Optional: make the image circular */
+}
+.top-71{
+  top: 71px !important;
+
 }

@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/Admin');
 const nodemailer = require('nodemailer');
 const mjml = require('mjml');
 const fs = require('fs');
@@ -6,6 +6,8 @@ const path = require('path');
 const { google } = require('googleapis');
 const jwt = require('jsonwebtoken');
 const sgMail = require('@sendgrid/mail');
+const speakeasy = require('speakeasy');
+const qrcode = require('qrcode');
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -46,7 +48,50 @@ class UserService {
 
         return user;
     }
+    async verifyToken(userId, token) {
+        try {
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+            const verified = speakeasy.totp.verify({
+                secret: user.secretKey,
+                encoding: 'base32',
+                token,
+                window: 2
+            });
+            return verified;
+        } catch (error) {
+            console.error('Error in verifyToken:', error);
+            throw error;
+        }
+    }
+    async generateSecretKey(userId) {
+        try {
+            // Tạo secretKey ngẫu nhiên
+            const secretKey = speakeasy.generateSecret({ length: 20 });
 
+            // Lưu secret key vào cơ sở dữ liệu
+            const user = await User.findById(userId);
+            if (!user) {
+                throw new Error('User not found');
+            }
+            if (user.secretKey != null) {
+                //return null;
+            }
+            var secretKeyBase32 = secretKey.base32;
+
+            user.secretKey = secretKeyBase32;
+            await user.save();
+
+            // Tạo mã QR để người dùng quét
+            var qrCode = await qrcode.toDataURL(secretKey.otpauth_url);
+            return qrCode;
+        } catch (error) {
+            console.error('Error in generateSecretKey:', error);
+            throw error;
+        }
+    }
     isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
