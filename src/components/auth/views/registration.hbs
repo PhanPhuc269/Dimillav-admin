@@ -1,55 +1,43 @@
-<!-- Start Banner Area -->
-<section class="banner-area organic-breadcrumb">
-	<div class="container">
-		<div class="breadcrumb-banner d-flex flex-wrap align-items-center justify-content-end">
-			
-		</div>
-	</div>
-</section>
-<!-- End Banner Area -->
-
-<!--================register Box Area =================-->
-<section class="register_box_area section_gap">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6">
-				<div class="register_box_img">
-					<img class="img-fluid" src="/img/login.jpg" alt="">
-					<div class="hover">
-						<h4>Welcome to our shoe store!</h4>
-						<p>If you already have an account, </p>
-						<a class="primary-btn" href="/login">click here to login</a>
-					</div>
+<!-- Sign Up Start -->
+<div class="container-fluid">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <form id="registrationForm" class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <a href="index.html" class="">
+                        <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>DarkPan</h3>
+                    </a>
+                    <h3>Sign Up</h3>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingText" name="username" placeholder="jhondoe">
+                    <label for="floatingText">Username</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="email" class="form-control" id="floatingInput" name="email" placeholder="name@example.com">
+                    <label for="floatingInput">Email address</label>
+                </div>
+                <div class="form-floating mb-4">
+                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
+                    <label for="floatingPassword">Password</label>
+                </div>
+				<div class="form-floating mb-4">
+					<input type="password" class="form-control" id="floatingRepeatPassword" name="repeatPassword" placeholder="Repeat Password">
+					<label for="floatingRepeatPassword">Repeat Password</label>
 				</div>
-			</div>
-			<div class="col-lg-6">
-				<div class="register_form_inner pt-5">
-					<h3>Sign up to enter</h3>
-					<form class="row register_form" action="/register" method="post" id="registerForm" novalidate="novalidate">
-						
-						<div class="col-md-12 form-group">
-							<input required type="text" class="form-control" id="username" name="username" placeholder="Username" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Username'" >
-						</div>
-						<div class="col-md-12 form-group">
-							<input required type="email" class="form-control" id="email" name="email" placeholder="Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email'" >
-						</div>
-						<div class="col-md-12 form-group">
-							<input required type="password" class="form-control" id="password" name="password" placeholder="Password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Password'" >
-						</div>
-						<div class="col-md-12 form-group">
-							<input required type="password" class="form-control" id="re-password" name="re-password" placeholder="Re-enter password" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Re-enter password'" >
-						</div>
-						<div class="col-md-12 form-group">
-							<div id="error-message" class="text-danger"></div>	
-						</div>
-						<div class="col-md-12 form-group">
-							<button type="submit" value="submit" class="register_btn" onclick="handleRegister(event)">Continue</button>
-							<a href="#">Conditions of Use and Privacy Notice</a>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-<script src="js/register.js"></script>
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div>
+                    <a href="">Forgot Password</a>
+                </div>
+                <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                <p class="text-center mb-0">Already have an Account? <a href="">Sign In</a></p>
+                <div id="message" class="alert" style="display: none;"></div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Sign Up End -->
+<script src="/js/register.js"></script>

@@ -6,6 +6,7 @@ const settingRouter=require('../components/setting/settingRoute');
 const productRouter=require('../components/product/productRoute');
 const orderRouter=require('../components/order/orderRoute');
 const reportRouter=require('../components/report/reportRoute');
+const accountRoute=require('../components/account/accountRoute');
 
 function router(app)
 {
@@ -16,7 +17,7 @@ function router(app)
    app.use('/order', orderRouter);
    app.use('/product', productRouter);
    app.use('/report', reportRouter);
-
+   app.use('/account', accountRoute);
 
 }
 
