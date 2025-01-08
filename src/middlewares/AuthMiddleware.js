@@ -3,17 +3,20 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     } else {
-      res.redirect('/login');
+      res.redirect('/auth/login');
     }
   },
   ensureAuthenticated:(req, res, next)=> {
     if (req.isAuthenticated()) {
         if (!req.user.isConfirmed) {
-            return res.redirect('/verify'); // Redirect đến trang xác thực email
+            return res.redirect('/authentication'); // Redirect đến trang xác thực email
         }
+        // if (!req.session.authenByCode) {
+        //     return res.redirect('/auth/verify'); // Redirect nếu tài khoản bị khóa
+        // }
         return next();
     }
-    res.redirect('/login'); // Redirect nếu chưa đăng nhập
+    res.redirect('/auth/login'); // Redirect nếu chưa đăng nhập
   },  
 
   ensureRole: (role) => {

@@ -23,7 +23,21 @@ const storage = new CloudinaryStorage({
   },
 });
 
+// Cấu hình Multer để sử dụng Cloudinary làm storage
+const AvatarStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "user_avatars", // Thư mục lưu trữ trên Cloudinary
+    allowed_formats: ["jpg", "jpeg", "png", "gif"], // Định dạng file cho phép
+    public_id: (req, file) => {
+      // Tên file tải lên trên Cloudinary
+      return `avatar_${Date.now()}`;
+    },
+  },
+});
+
+const uploadAvatar = multer({ storage: AvatarStorage });
 const upload = multer({ storage });
 
 
-module.exports = upload;
+module.exports = {upload, uploadAvatar};

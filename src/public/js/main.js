@@ -1,3 +1,20 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+    const path = window.location.pathname;
+    const page = path.split("/").pop();
+
+    const menuItems = {
+        '': 'dashboard',
+        'account': 'account',
+        'typography.html': 'typography',
+        'element.html': 'other-elements'
+    };
+
+    if (menuItems[page]) {
+        document.getElementById(menuItems[page]).classList.add('active');
+    }
+});
+
 (function ($) {
     "use strict";
 
@@ -209,4 +226,3 @@
 
     
 })(jQuery);
-
