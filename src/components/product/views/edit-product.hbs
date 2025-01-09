@@ -7,8 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #2c3e50; /* Màu nền tối */
-            color: #ecf0f1; /* Màu chữ sáng */
+            background-color: #2c3e50; /* Dark background */
+            color: #ecf0f1; /* Light text */
             margin: 0;
             padding: 0;
         }
@@ -16,13 +16,13 @@
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #34495e; /* Màu nền form */
+            background-color: #34495e; /* Form background */
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         }
         h1 {
             text-align: center;
-            color: #1abc9c; /* Màu chủ đạo */
+            color: #1abc9c; /* Primary color */
             margin-bottom: 20px;
         }
         .form-group {
@@ -37,6 +37,7 @@
         input[type="text"],
         input[type="number"],
         textarea,
+        select,
         input[type="file"] {
             width: 100%;
             padding: 10px;
@@ -47,6 +48,10 @@
         }
         textarea {
             resize: vertical;
+        }
+        .form-group.multi-input {
+            display: flex;
+            gap: 10px;
         }
         button {
             width: 100%;
@@ -61,6 +66,10 @@
         }
         button:hover {
             background-color: #16a085;
+        }
+        .alert.alert-danger {
+            color: #e74c3c;
+            margin-top: 5px;
         }
     </style>
 </head>
@@ -83,31 +92,56 @@
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="number" id="price" name="price" value="{{#if formData.price}}{{formData.price}}{{else}}{{product.price}}{{/if}}" />
-                {{#if errors.price}}
-                    <div class="alert alert-danger">{{errors.price}}</div>
+                <label for="originalPrice">Original Price:</label>
+                <input type="number" id="originalPrice" name="originalPrice" value="{{#if formData.originalPrice}}{{formData.originalPrice}}{{else}}{{product.originalPrice}}{{/if}}" required />
+                {{#if errors.originalPrice}}
+                    <div class="alert alert-danger">{{errors.originalPrice}}</div>
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" value="{{#if formData.quantity}}{{formData.quantity}}{{else}}{{product.quantity}}{{/if}}" />
-                {{#if errors.quantity}}
-                    <div class="alert alert-danger">{{errors.quantity}}</div>
+                <label for="salePrice">Sale Price:</label>
+                <input type="number" id="salePrice" name="salePrice" value="{{#if formData.salePrice}}{{formData.salePrice}}{{else}}{{product.salePrice}}{{/if}}" />
+                {{#if errors.salePrice}}
+                    <div class="alert alert-danger">{{errors.salePrice}}</div>
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="category">Category:</label>
-                <input type="text" id="category" name="category" value="{{#if formData.category}}{{formData.category}}{{else}}{{product.category}}{{/if}}" />
-                {{#if errors.category}}
-                    <div class="alert alert-danger">{{errors.category}}</div>
+                <label for="saleDuration">Sale Duration (hours):</label>
+                <input type="number" id="saleDuration" name="saleDuration" value="{{#if formData.saleDuration}}{{formData.saleDuration}}{{else}}{{product.saleDuration}}{{/if}}" />
+                {{#if errors.saleDuration}}
+                    <div class="alert alert-danger">{{errors.saleDuration}}</div>
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="type">Type:</label>
-                <input type="text" id="type" name="type" value="{{#if formData.type}}{{formData.type}}{{else}}{{product.type}}{{/if}}" />
-                {{#if errors.type}}
-                    <div class="alert alert-danger">{{errors.type}}</div>
+                <label for="material">Material:</label>
+                <input type="text" id="material" name="material" value="{{#if formData.material}}{{formData.material}}{{else}}{{product.material}}{{/if}}" />
+                {{#if errors.material}}
+                    <div class="alert alert-danger">{{errors.material}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="style">Style:</label>
+                <input type="text" id="style" name="style" value="{{#if formData.style}}{{formData.style}}{{else}}{{product.style}}{{/if}}" />
+                {{#if errors.style}}
+                    <div class="alert alert-danger">{{errors.style}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="Men" {{#if (eq product.gender 'Men')}}selected{{/if}}>Men</option>
+                    <option value="Women" {{#if (eq product.gender 'Women')}}selected{{/if}}>Women</option>
+                    <option value="Unisex" {{#if (eq product.gender 'Unisex')}}selected{{/if}}>Unisex</option>
+                </select>
+                {{#if errors.gender}}
+                    <div class="alert alert-danger">{{errors.gender}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="warranty">Warranty:</label>
+                <input type="text" id="warranty" name="warranty" value="{{#if formData.warranty}}{{formData.warranty}}{{else}}{{product.warranty}}{{/if}}" />
+                {{#if errors.warranty}}
+                    <div class="alert alert-danger">{{errors.warranty}}</div>
                 {{/if}}
             </div>
             <div class="form-group">
@@ -118,20 +152,52 @@
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="availibility">Availability:</label>
-                <select id="availibility" name="availibility" required>
-                    <option value="In Stock" {{#if (eq product.availibility 'In Stock')}}selected{{/if}}>In Stock</option>
-                    <option value="Out of Stock" {{#if (eq product.availibility 'Out of Stock')}}selected{{/if}}>Out of Stock</option>
-                </select>
-                {{#if errors.availibility}}
-                    <div class="alert alert-danger">{{errors.availibility}}</div>
+                <label for="type">Type:</label>
+                <input type="text" id="type" name="type" value="{{#if formData.type}}{{formData.type}}{{else}}{{product.type}}{{/if}}" />
+                {{#if errors.type}}
+                    <div class="alert alert-danger">{{errors.type}}</div>
                 {{/if}}
             </div>
             <div class="form-group">
-                <label for="image">Image:</label>
-                <input type="file" id="image" name="image" />
-                {{#if errors.image}}
-                    <div class="alert alert-danger">{{errors.image}}</div>
+                <label for="category">Category:</label>
+                <input type="text" id="category" name="category" value="{{#if formData.category}}{{formData.category}}{{else}}{{product.category}}{{/if}}" />
+                {{#if errors.category}}
+                    <div class="alert alert-danger">{{errors.category}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="tags">Tags (comma separated):</label>
+                <input type="text" id="tags" name="tags" value="{{#if formData.tags}}{{formData.tags}}{{else}}{{#each product.tags}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}{{/if}}" />
+                {{#if errors.tags}}
+                    <div class="alert alert-danger">{{errors.tags}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="availability">Availability:</label>
+                <select id="availability" name="availability" required>
+                    <option value="In Stock" {{#if (eq product.availability 'In Stock')}}selected{{/if}}>In Stock</option>
+                    <option value="Out of Stock" {{#if (eq product.availability 'Out of Stock')}}selected{{/if}}>Out of Stock</option>
+                </select>
+                {{#if errors.availability}}
+                    <div class="alert alert-danger">{{errors.availability}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <div class="multi-input">
+                    <input type="number" name="stock[0][size]" placeholder="Size" value="{{#if formData.stock.[0].size}}{{formData.stock.[0].size}}{{else}}{{product.stock.[0].size}}{{/if}}" required />
+                    <input type="text" name="stock[0][color]" placeholder="Color" value="{{#if formData.stock.[0].color}}{{formData.stock.[0].color}}{{else}}{{product.stock.[0].color}}{{/if}}" required />
+                    <input type="number" name="stock[0][quantity]" placeholder="Quantity" value="{{#if formData.stock.[0].quantity}}{{formData.stock.[0].quantity}}{{else}}{{product.stock.[0].quantity}}{{/if}}" required />
+                </div>
+                {{#if errors.stock.[0]}}
+                    <div class="alert alert-danger">{{errors.stock.[0]}}</div>
+                {{/if}}
+            </div>
+            <div class="form-group">
+                <label for="images">Image(s):</label>
+                <input type="file" id="images" name="images" multiple />
+                {{#if errors.images}}
+                    <div class="alert alert-danger">{{errors.images}}</div>
                 {{/if}}
             </div>
             <button type="submit">Update Product</button>

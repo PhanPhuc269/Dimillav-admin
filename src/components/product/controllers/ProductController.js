@@ -38,7 +38,7 @@ class ProductController {
                 minPrice,
                 maxPrice,
                 page = 1,
-                limit = 12,
+                limit = 6,
                 keyword,
                 sort,
             } = req.query;
@@ -69,18 +69,18 @@ class ProductController {
             }
 
             if (minPrice || maxPrice) {
-                filters.price = {};
-                if (minPrice) filters.price.$gte = parseFloat(minPrice);
-                if (maxPrice) filters.price.$lte = parseFloat(maxPrice);
+                filters.originalPrice = {};
+                if (minPrice) filters.originalPrice.$gte = parseFloat(minPrice);
+                if (maxPrice) filters.originalPrice.$lte = parseFloat(maxPrice);
             }
 
             let sortCriteria = {};
             switch (sort) {
                 case 'price_asc':
-                    sortCriteria = { price: 1 };
+                    sortCriteria = { originalPrice: 1 };
                     break;
                 case 'price_desc':
-                    sortCriteria = { price: -1 };
+                    sortCriteria = { originalPrice: -1 };
                     break;
                 case 'creation_time_desc':
                     sortCriteria = { createdAt: -1 };
@@ -89,7 +89,10 @@ class ProductController {
                     sortCriteria = { createdAt: 1 };
                     break;
                 case 'total_purchase_desc':
-                    sortCriteria = { totalPurchase: -1 };
+                    sortCriteria = { totalPurchased: -1 };
+                    break;
+                case 'total_purchase_asc':
+                    sortCriteria = { totalPurchased: 1 };
                     break;
                 default:
                     sortCriteria = { createdAt: -1 };
@@ -102,6 +105,7 @@ class ProductController {
             const categories = await ProductService.getAllCategories();
             const brands = await ProductService.getAllBrands();
 
+            
             res.render('list', { // Changed from res.json to res.render
                 products: mutipleMongooseToObject(products),
                 total,
@@ -127,7 +131,7 @@ class ProductController {
         try {
             const keyword = req.query.keyword?.trim() || '';
             const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 12;
+            const limit = parseInt(req.query.limit) || 6;
             const skip = (page - 1) * limit;
             const sort = req.query.sort || 'default';
 
@@ -492,7 +496,7 @@ class ProductController {
                 minPrice,
                 maxPrice,
                 page = 1,
-                limit = 12,
+                limit = 6,
                 keyword,
                 sort,
             } = req.query;
@@ -531,10 +535,10 @@ class ProductController {
             let sortCriteria = {};
             switch (sort) {
                 case 'price_asc':
-                    sortCriteria = { price: 1 };
+                    sortCriteria = { originalPrice: 1 };
                     break;
                 case 'price_desc':
-                    sortCriteria = { price: -1 };
+                    sortCriteria = { originalPrice: -1 };
                     break;
                 case 'creation_time_desc':
                     sortCriteria = { createdAt: -1 };
@@ -543,7 +547,10 @@ class ProductController {
                     sortCriteria = { createdAt: 1 };
                     break;
                 case 'total_purchase_desc':
-                    sortCriteria = { totalPurchase: -1 };
+                    sortCriteria = { totalPurchased: -1 };
+                    break;
+                case 'total_purchase_asc':
+                    sortCriteria = { totalPurchased: 1 };
                     break;
                 default:
                     sortCriteria = { createdAt: -1 };

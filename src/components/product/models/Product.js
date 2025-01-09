@@ -5,26 +5,29 @@ const slugify = require('slugify');
 const Product = new Schema({
   name: { type: String, required: true },
   description: { type: String },
-  sizesAvailable: [{ type: Number }], // Các size khả dụng
-  stockBySize: { type: Map, of: Number }, // Số lượng theo size
   material: { type: String },
   style: { type: String },
   gender: { type: String, enum: ['Men', 'Women', 'Unisex'], default: 'Unisex' },
   originalPrice: { type: Number, required: true }, // Giá gốc
   salePrice: { type: Number }, // Giá đang sale
   saleDuration: { type: Number }, // Thời gian sale còn lại (đơn vị: giờ hoặc ngày)
-  quantity: { type: Number, required: true }, // Số lượng sản phẩm
   totalPurchased: { type: Number, default: 0 }, // Tổng số lượng khách hàng đã mua
   images: [{ type: String }], // Mảng chứa URL ảnh sản phẩm
   category: { type: String },
   availability: { type: String }, // Tình trạng sản phẩm (e.g., "In stock", "Out of stock")
   brand: { type: String },
   type: { type: String },
-  color: { type: String },
   rate: { type: Number },
   warranty: { type: String }, // Bảo hành
   slug: { type: String, unique: true },
   tags: [{ type: String }], // Từ khóa liên quan đến sản phẩm
+
+  // Trường stock mới
+  stock: [{
+      size: { type: Number, required: true }, // Kích thước sản phẩm
+      color: { type: String, required: true }, // Màu sắc
+      quantity: { type: Number, required: true }, // Số lượng còn lại của sản phẩm theo size và màu
+  }],
 }, {
   timestamps: true, // Thêm `createdAt` và `updatedAt` tự động
 });

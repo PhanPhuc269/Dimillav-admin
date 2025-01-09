@@ -87,10 +87,36 @@
                         {{#each products}}
                             <div class="col">
                                 <div class="card shadow-sm h-100 border-0">
-                                    <img src="{{this.image}}" alt="{{this.name}}" class="card-img-top img-fluid">
+                                    <!-- Use the first image in the images array -->
+                                    <img src="{{this.images}}" alt="{{this.name}}" class="card-img-top img-fluid">
                                     <div class="card-body">
                                         <h5 class="card-title text-primary">{{this.name}}</h5>
-                                        <p class="card-text text-muted mb-1">Price: <span class="fw-bold">{{this.price}}</span> VND</p>
+                                        <p class="card-text text-muted mb-1">Brand: <span class="fw-bold">{{this.brand}}</span></p>
+                                        <p class="card-text text-muted mb-1">Category: <span class="fw-bold">{{this.category}}</span></p>
+                                        <p class="card-text text-muted mb-1">Material: <span class="fw-bold">{{this.material}}</span></p>
+                                        <p class="card-text text-muted mb-1">Style: <span class="fw-bold">{{this.style}}</span></p>
+                                        <p class="card-text text-muted mb-1">Gender: <span class="fw-bold">{{this.gender}}</span></p>
+                                        <p class="card-text text-muted mb-1">Availability: <span class="fw-bold">{{this.availability}}</span></p>
+                                        <p class="card-text text-muted mb-1">Original Price: <span class="fw-bold">{{this.originalPrice}}</span> VND</p>
+                                        {{!-- 
+                                        <p class="card-text text-muted mb-1">Sale Price: <span class="fw-bold">{{this.salePrice}}</span> VND</p>
+                                        <p class="card-text text-muted mb-1">Sale Duration: <span class="fw-bold">{{this.saleDuration}}</span></p> --}}
+                                        <p class="card-text text-muted mb-1">Total Purchased: <span class="fw-bold">{{this.totalPurchased}}</span></p>
+                                        {{!-- <p class="card-text text-muted mb-1">Warranty: <span class="fw-bold">{{this.warranty}}</span></p> --}}
+                                        <p class="card-text text-muted mb-1">Rate: <span class="fw-bold">{{this.rate}}</span></p>
+                                        <!-- Display stock info -->
+                                        {{#if this.stock.length}}
+                                            <div class="mt-2">
+                                                <h6>Stock Details:</h6>
+                                                {{#each this.stock}}
+                                                    <p class="mb-1">
+                                                        Size: <strong>{{this.size}}</strong>,
+                                                        Color: <strong>{{this.color}}</strong>,
+                                                        Quantity: <strong>{{this.quantity}}</strong>
+                                                    </p>
+                                                {{/each}}
+                                            </div>
+                                        {{/if}}
                                     </div>
                                     <div class="card-footer bg-light d-flex justify-content-between align-items-center">
                                         <a href="/product/update/{{this.slug}}" class="btn btn-outline-primary btn-sm">
@@ -176,10 +202,33 @@
                 const productCard = `
                     <div class="col">
                         <div class="card shadow-sm h-100 border-0">
-                            <img src="${product.image}" alt="${product.name}" class="card-img-top img-fluid">
+                            <img src="${(product.images && product.images.length) ? product.images[0] : '/path/to/default.jpg'}" alt="${product.name}" class="card-img-top img-fluid">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">${product.name}</h5>
-                                <p class="card-text text-muted mb-1">Price: <span class="fw-bold">${product.price}</span> VND</p>
+                                <p class="card-text text-muted mb-1">Brand: <span class="fw-bold">${product.brand ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Category: <span class="fw-bold">${product.category ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Material: <span class="fw-bold">${product.material ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Style: <span class="fw-bold">${product.style ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Gender: <span class="fw-bold">${product.gender ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Availability: <span class="fw-bold">${product.availability ?? ''}</span></p>
+                                <p class="card-text text-muted mb-1">Original Price: <span class="fw-bold">${product.originalPrice ?? 0}</span> VND</p>
+                                <!-- 
+                                <p class="card-text text-muted mb-1">Sale Price: <span class="fw-bold">${product.salePrice ?? 0}</span> VND</p>
+                                <p class="card-text text-muted mb-1">Sale Duration: <span class="fw-bold">${product.saleDuration ?? ''}</span></p> 
+                                -->
+                                <p class="card-text text-muted mb-1">Total Purchased: <span class="fw-bold">${product.totalPurchased ?? 0}</span></p>
+                                <!-- <p class="card-text text-muted mb-1">Warranty: <span class="fw-bold">${product.warranty ?? ''}</span></p> -->
+                                <p class="card-text text-muted mb-1">Rate: <span class="fw-bold">${product.rate ?? 0}</span></p>
+                                ${(product.stock && product.stock.length) ? `
+                                    <div class="mt-2">
+                                        <h6>Stock Details:</h6>
+                                        ${product.stock.map(s => `
+                                            <p class="mb-1">
+                                                Size: <strong>${s.size}</strong>,
+                                                Color: <strong>${s.color}</strong>,
+                                                Quantity: <strong>${s.quantity}</strong>
+                                            </p>`).join('')}
+                                    </div>` : ''}
                             </div>
                             <div class="card-footer bg-light d-flex justify-content-between align-items-center">
                                 <a href="/product/update/${product.slug}" class="btn btn-outline-primary btn-sm">
@@ -295,11 +344,11 @@
             }
         });
 
-        // Event listener for sort dropdown
+        {{!-- // Event listener for sort dropdown
         sortDropdown.addEventListener('click', async function (e) {
             if (e.target.tagName === 'A') {
                 e.preventDefault();
-                const sort = e.target.getAttribute('href').split('sort=')[1].split('&')[0];
+                const sort = new URL(e.target.href).searchParams.get('sort'); // More reliable extraction
                 const params = getFilters();
                 params.sort = sort;
                 params.page = 1; // Reset to first page on sort
@@ -310,7 +359,7 @@
                     renderPagination(data.currentPage, data.totalPages, params);
                 }
             }
-        });
+        }); --}}
 
         // Initial load
         (async () => {
