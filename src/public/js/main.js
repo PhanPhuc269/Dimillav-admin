@@ -1,4 +1,5 @@
 
+
 document.addEventListener('DOMContentLoaded', function () {
     let currentPath = window.location.pathname;
 
@@ -18,6 +19,16 @@ document.addEventListener('DOMContentLoaded', function () {
         '/report/revenue': { id: 'menu-report-revenue', parentId: 'menu-reports' },
         '/report/sales': { id: 'menu-report-sales', parentId: 'menu-reports' },
         '/report/topProducts': { id: 'menu-report-topProducts', parentId: 'menu-reports' },
+
+document.addEventListener('DOMContentLoaded', function() {
+    const path = window.location.pathname;
+    const page = path.split("/")[1];
+
+    const menuItems = {
+        '': 'dashboard',
+        'account': 'account',
+        'product': 'products',
+
     };
 
     const menuItem = menuMap[currentPath];
