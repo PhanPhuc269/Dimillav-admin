@@ -275,7 +275,7 @@ class ProductController {
                 // Lưu sản phẩm sau khi cập nhật
                 const updatedProduct = await ProductService.saveProduct(product);
 
-                res.redirect('/product/list');
+                res.redirect('back');
             } catch (error) {
                 console.error('Error updating product:', error);
                 res.status(500).json({ message: 'Error updating product', error });
@@ -403,57 +403,93 @@ class ProductController {
 
     // Handle creating a new product
     async createProduct(req, res, next) {
-        upload.single('image')(req, res, async function (err) {
+        upload.array('images', 10)(req, res, async function (err) {
             try {
                 if (err) {
                     console.error('Multer error:', err);
-                    return res.status(400).json({ message: 'Error uploading file', error: err.message });
+                    return res.status(400).json({ message: 'Error uploading files', error: err.message });
                 }
-
-                const { name, description, price, quantity, type, availibility, category, brand, color } = req.body;
-
+    
+                const { name, description, originalPrice, warranty, type, availibility, category, brand, color, stock } = req.body;
+    
                 // Validate required fields
-                const requiredFields = ['name', 'description', 'price', 'quantity', 'type', 'availibility', 'category', 'brand', 'color'];
+                const requiredFields = ['name', 'description', 'originalPrice', 'warranty', 'type', 'availibility', 'category', 'brand', 'color', 'stock'];
                 let errors = {};
-
+    
                 for (const field of requiredFields) {
                     if (!req.body[field] || req.body[field].toString().trim() === '') {
                         errors[field] = `Field '${field}' is required.`;
                     }
                 }
-
+    
                 // Validate price and quantity
-                if (isNaN(price) || Number(price) < 0) {
-                    errors.price = 'Price must be a non-negative number.';
+                if (isNaN(originalPrice) || Number(originalPrice) < 0) {
+                    errors.originalPrice = 'Price must be a non-negative number.';
                 }
-
-                if (isNaN(quantity) || Number(quantity) < 0) {
-                    errors.quantity = 'Quantity must be a non-negative number.';
+                // Validate warranty
+                if (isNaN(warranty) || Number(warranty) < 0) {
+                    errors.warranty = 'Warranty must be a non-negative number.';
                 }
-
+    
+                // Validate stock
+                let parsedStock;
+                try {
+                    parsedStock = JSON.parse(stock);
+                } catch (e) {
+                    parsedStock = [];
+                }
+    
+                if (!Array.isArray(parsedStock) || parsedStock.length === 0) {
+                    errors.stock = 'Stock must be a non-empty array.';
+                } else {
+                    for (const item of parsedStock) {
+                        if (isNaN(item.size) || Number(item.size) < 0) {
+                            errors.stock = 'Size must be a non-negative number.';
+                            break;
+                        }
+                        if (!item.color || item.color.trim() === '') {
+                            errors.stock = 'Color is required.';
+                            break;
+                        }
+                        if (isNaN(item.quantity) || Number(item.quantity) < 0) {
+                            errors.stock = 'Quantity must be a non-negative number.';
+                            break;
+                        }
+                    }
+                }
+    
                 // If there are validation errors, render the form again with errors and existing input
                 if (Object.keys(errors).length > 0) {
                     return res.render('create-product', { errors, formData: req.body });
                 }
-
-                const imagePath = req.file ? req.file.path : '';
-
+    
+                // Process uploaded files
+                const imagePaths = req.files ? req.files.map(file => file.path) : [];
+    
+                // Create a new product
                 const newProduct = new Product({
                     name,
                     description,
-                    price,
-                    quantity,
+                    originalPrice,
                     type,
+                    warranty,
                     availibility,
                     category,
                     brand,
                     color,
-                    image: imagePath,
-                    createdAt: new Date(),
+                    images: imagePaths, // Store all image paths
+                    stock: parsedStock.map(item => {
+                        return {
+                            size: item.size,
+                            color: item.color,
+                            quantity: item.quantity,
+                        };
+                    }),
                 });
-
+    
+                // Save product
                 await ProductService.saveProduct(newProduct);
-
+    
                 res.redirect('/product/list');
             } catch (error) {
                 console.error('Error creating product:', error);
@@ -461,7 +497,6 @@ class ProductController {
             }
         });
     }
-
     // Add deleteProduct method
     async deleteProduct(req, res, next) {
         try {
