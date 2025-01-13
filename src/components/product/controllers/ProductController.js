@@ -211,70 +211,99 @@ class ProductController {
     }
 
     async updateProduct(req, res, next) {
-        upload.single('image')(req, res, async function (err) {
+        upload.array('images', 10)(req, res, async function (err) {
             try {
                 if (err) {
                     console.error('Multer error:', err);
                     return res.status(400).json({ message: 'Error uploading file', error: err.message });
                 }
-
-                const { slug } = req.params;
-                const updateData = req.body;
-
-                // Validate provided fields
+    
+                const { slug } = req.params; // Slug từ URL
+                const updateData = req.body; // Dữ liệu gửi lên từ form
+    
+                // Validate dữ liệu
                 let errors = {};
-
-                if (updateData.price !== undefined) {
-                    if (isNaN(updateData.price) || Number(updateData.price) < 0) {
-                        errors.price = 'Price must be a non-negative number.';
+    
+                // Validate giá sản phẩm
+                if (updateData.originalPrice !== undefined) {
+                    if (isNaN(updateData.originalPrice) || Number(updateData.originalPrice) < 0) {
+                        errors.originalPrice = 'Original price must be a non-negative number.';
                     }
                 }
-
-                if (updateData.quantity !== undefined) {
-                    if (isNaN(updateData.quantity) || Number(updateData.quantity) < 0) {
-                        errors.quantity = 'Quantity must be a non-negative number.';
+    
+                // Validate bảo hành
+                if (updateData.warranty !== undefined) {
+                    if (!/^\d+\s(years?|months?)$/i.test(updateData.warranty)) {
+                        errors.warranty = 'Warranty must be a valid duration (e.g., "2 years" or "6 months").';
                     }
                 }
-
-                // If there are validation errors, render the form again with errors and existing input
+    
+                // Validate stock (nếu có)
+                if (updateData.stock !== undefined) {
+                    try {
+                        
+                        if (!Array.isArray(updateData.stock)) {
+                            throw new Error('Stock must be an array');
+                        }
+    
+                        updateData.stock.forEach(item => {
+                            if (!item.color || !item.size || !item.quantity) {
+                                throw new Error('Each stock item must have color, size, and quantity');
+                            }
+                            if (isNaN(item.size) || isNaN(item.quantity) || Number(item.quantity) < 0) {
+                                throw new Error('Stock size and quantity must be non-negative numbers');
+                            }
+                        });
+                    } catch (parseError) {
+                        errors.stock = 'Invalid stock data';
+                    }
+                }
+    
+                // Nếu có lỗi validate, trả lại form với lỗi
                 if (Object.keys(errors).length > 0) {
-                    // Retrieve the product to display current data
                     const product = await ProductService.findProductBySlug(slug);
                     if (!product) {
                         return res.status(404).json({ message: 'Product not found' });
                     }
-
-                    // Render the edit form with errors and existing product data
-                    return res.render('edit-product', { 
+                    return res.render('edit-product', {
                         product: mongooseToObject(product),
                         errors,
-                        formData: updateData
+                        formData: updateData,
                     });
                 }
-
-                // Optionally sanitize input data here
-
+    
                 // Tìm sản phẩm theo slug
                 const product = await ProductService.findProductBySlug(slug);
                 if (!product) {
                     return res.status(404).json({ message: 'Product not found' });
                 }
-
-                // Cập nhật các trường từ body (chỉ cập nhật nếu có giá trị)
+    
+                // Cập nhật các trường từ body
                 for (const key in updateData) {
-                    if (updateData[key] !== undefined) {
+                    if (updateData[key] !== undefined && key !== 'stock') {
                         product[key] = updateData[key];
                     }
                 }
-
-                // Xử lý cập nhật hình ảnh nếu file được upload
-                if (req.file) {
-                    product.images.push(req.file.path); // URL của hình ảnh từ Cloudinary
+    
+                // Cập nhật stock (nếu có)
+                if (updateData.stock) {
+                    product.stock = updateData.stock.map(item => ({
+                        color: item.color,
+                        size: parseInt(item.size, 10),
+                        quantity: parseInt(item.quantity, 10),
+                    }));
                 }
-
+    
+                // Xử lý thêm hình ảnh mới nếu có
+                if (req.files && req.files.length > 0) {
+                    const imagePaths = req.files.map(file => file.path);
+                    product.images.push(...imagePaths); // Thêm tất cả hình ảnh mới vào danh sách
+                }
+    
                 // Lưu sản phẩm sau khi cập nhật
                 const updatedProduct = await ProductService.saveProduct(product);
-
+    
+                // Điều hướng về trang trước
                 res.redirect('back');
             } catch (error) {
                 console.error('Error updating product:', error);
@@ -282,6 +311,7 @@ class ProductController {
             }
         });
     }
+    
 
     // Thêm ảnh cho sản phẩm
     async addImage(req, res, next) {
@@ -410,10 +440,10 @@ class ProductController {
                     return res.status(400).json({ message: 'Error uploading files', error: err.message });
                 }
     
-                const { name, description, originalPrice, warranty, type, availibility, category, brand, color, stock } = req.body;
+                const { name, description, originalPrice, warranty, type, availibility, category, brand, stock } = req.body;
     
                 // Validate required fields
-                const requiredFields = ['name', 'description', 'originalPrice', 'warranty', 'type', 'availibility', 'category', 'brand', 'color', 'stock'];
+                const requiredFields = ['name', 'description', 'originalPrice', 'warranty', 'type', 'availibility', 'category', 'brand', 'stock'];
                 let errors = {};
     
                 for (const field of requiredFields) {
@@ -426,9 +456,12 @@ class ProductController {
                 if (isNaN(originalPrice) || Number(originalPrice) < 0) {
                     errors.originalPrice = 'Price must be a non-negative number.';
                 }
-                // Validate warranty
-                if (isNaN(warranty) || Number(warranty) < 0) {
-                    errors.warranty = 'Warranty must be a non-negative number.';
+    
+                // Validate bảo hành
+                if (warranty !== undefined) {
+                    if (!/^\d+\s(years?|months?)$/i.test(warranty)) {
+                        errors.warranty = 'Warranty must be a valid duration (e.g., "2 years" or "6 months").';
+                    }
                 }
     
                 // Validate stock
@@ -445,10 +478,6 @@ class ProductController {
                     for (const item of parsedStock) {
                         if (isNaN(item.size) || Number(item.size) < 0) {
                             errors.stock = 'Size must be a non-negative number.';
-                            break;
-                        }
-                        if (!item.color || item.color.trim() === '') {
-                            errors.stock = 'Color is required.';
                             break;
                         }
                         if (isNaN(item.quantity) || Number(item.quantity) < 0) {
@@ -476,7 +505,6 @@ class ProductController {
                     availibility,
                     category,
                     brand,
-                    color,
                     images: imagePaths, // Store all image paths
                     stock: parsedStock.map(item => {
                         return {
@@ -488,9 +516,10 @@ class ProductController {
                 });
     
                 // Save product
-                await ProductService.saveProduct(newProduct);
+                const product =  await ProductService.saveProduct(newProduct);
     
-                res.redirect('/product/list');
+                //res.redirect('/product/list');
+                res.redirect(`/product/update/${product.slug}`);
             } catch (error) {
                 console.error('Error creating product:', error);
                 res.status(500).json({ message: 'Error creating product', error });
