@@ -1,4 +1,4 @@
-function showToast(message, type = 'info', title = 'Notification', delay = 3000) {
+function showToast(message, type = 'info', title = 'Notification', delay = 3000, color='black') {
   // Tạo container nếu chưa có
   let toastContainer = document.querySelector('.toast-container');
   if (!toastContainer) {
@@ -17,7 +17,7 @@ function showToast(message, type = 'info', title = 'Notification', delay = 3000)
               ${getIcon(type)}
             </div>
         </div>
-        <div class="toast-body">
+        <div class="toast-body" style="color: ${color};">
           <strong>${title}</strong><br>${message}
         </div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>

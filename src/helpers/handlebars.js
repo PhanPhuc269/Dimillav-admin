@@ -82,4 +82,8 @@ module.exports={
         return false;
     },
     // Removed any status-related helpers
+        // Helper function to get file name from URL (register this on server-side Handlebars if needed)
+    getFileName: (url)=> {
+        return url.split('/').pop();
+    },
 }

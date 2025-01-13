@@ -87,7 +87,7 @@
                         {{#each products}}
                             <div class="col">
                                 <div class="card shadow-sm h-100 border-0">
-                                    <img src="{{this.image}}" alt="{{this.name}}" class="card-img-top img-fluid">
+                                    <img src="{{this.images.[1]}}" alt="{{this.name}}" class="card-img-top img-fluid">
                                     <div class="card-body">
                                         <h5 class="card-title text-primary">{{this.name}}</h5>
                                         <p class="card-text text-muted mb-1">Price: <span class="fw-bold">{{this.price}}</span> VND</p>
@@ -176,7 +176,7 @@
                 const productCard = `
                     <div class="col">
                         <div class="card shadow-sm h-100 border-0">
-                            <img src="${product.image}" alt="${product.name}" class="card-img-top img-fluid">
+                            <img src="${product.images[1]}" alt="${product.name}" class="card-img-top img-fluid">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">${product.name}</h5>
                                 <p class="card-text text-muted mb-1">Price: <span class="fw-bold">${product.price}</span> VND</p>
