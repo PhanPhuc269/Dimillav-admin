@@ -1,13 +1,13 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
-    const page = path.split("/").pop();
+    const page = path.split("/")[1];
 
     const menuItems = {
         '': 'dashboard',
         'account': 'account',
-        'typography.html': 'typography',
-        'element.html': 'other-elements'
+        'product': 'products',
+        'report': 'report',
     };
 
     if (menuItems[page]) {
