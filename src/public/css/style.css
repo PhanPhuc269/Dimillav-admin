@@ -309,3 +309,19 @@
     border-color: var(--primary);
     font-weight: bold;
 }
+.nav-item.dropdown .dropdown-menu {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-item.dropdown.show .dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+
+.nav-item.dropdown .nav-link.active {
+    background-color: var(--dark);
+    color: var(--primary);
+}
+

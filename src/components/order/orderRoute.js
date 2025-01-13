@@ -3,7 +3,7 @@ const router =express.Router();
 const orderController=require('./controllers/OrderController');
 const {ensureAuthenticated} = require('../../middlewares/AuthMiddleware');
 
-router.get('/',orderController.ViewProductCheckout);
+
 
 
 router.get('/',orderController.ViewOrderList);

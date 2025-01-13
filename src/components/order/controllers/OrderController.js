@@ -14,9 +14,9 @@ class OrderController {
 
     async ViewOrderList(req, res, next) {
         try {
-            const customerId = req.user._id;
+          
            
-            const orders = await OrderService.getAllOrdersSortedByDate(customerId);
+            const orders = await OrderService.getAllOrdersSortedByDate();
             res.render('orderList', {
                 orders: mutipleMongooseToObject(orders),
             });
