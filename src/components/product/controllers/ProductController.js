@@ -5,7 +5,7 @@ const { mongooseToObject } = require('../../../utils/mongoose');
 const Product = require("../models/Product");
 const ProductService = require('../services/ProductService');
 const cloudinary = require('cloudinary').v2;
-const upload = require('../../../config/cloudinary/cloudinaryConfig');
+const {upload} = require('../../../config/cloudinary/cloudinaryConfig');
 
 class ProductController {
 
@@ -269,7 +269,7 @@ class ProductController {
 
                 // Xử lý cập nhật hình ảnh nếu file được upload
                 if (req.file) {
-                    product.image = req.file.path; // URL của hình ảnh từ Cloudinary
+                    product.images.push(req.file.path); // URL của hình ảnh từ Cloudinary
                 }
 
                 // Lưu sản phẩm sau khi cập nhật
@@ -325,17 +325,18 @@ class ProductController {
     // Xóa ảnh của sản phẩm
     async removeImage(req, res, next) {
         try {
-            const { slug } = req.params;
+            const { slug, index } = req.params;
 
             const product = await ProductService.findProductBySlug(slug);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
-
-            product.image = null;
+            // Xóa ảnh khỏi mảng images
+            product.images.splice(index, 1);
+  
             await ProductService.saveProduct(product);
 
-            res.json({ message: 'Image removed successfully', product });
+            res.status(200).json({ message: 'Image removed successfully', product });
         } catch (error) {
             console.error('Error removing image:', error);
             res.status(500).json({ message: 'Error removing image', error });

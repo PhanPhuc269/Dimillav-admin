@@ -12,7 +12,7 @@ router.get('/search', productController.SearchProduct);
 router.get('/update/:slug', productController.editProductForm);
 router.post('/update/:slug', productController.updateProduct);
 router.patch('/:slug/image', productController.addImage);
-router.delete('/:slug/image', productController.removeImage);
+router.delete('/remove-image/:slug/:index', productController.removeImage);
 router.patch('/:slug/category-brand', productController.changeCategoryOrBrand);
 router.patch('/:slug/availability', productController.updateAvailability);
 
