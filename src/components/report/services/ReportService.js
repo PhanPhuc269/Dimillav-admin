@@ -9,7 +9,7 @@ class ReportService {
                 $gte: new Date(startDate),
                 $lte: new Date(endDate),
             },
-            status: 'completed', // Thêm điều kiện chỉ lấy đơn hàng đã hoàn thành
+            status: 'paid', // Thêm điều kiện chỉ lấy đơn hàng đã hoàn thành
         };
     
         const revenueReport = await Order.aggregate([
@@ -28,7 +28,7 @@ class ReportService {
     
     async getRevenueReportAllTime() {
         const matchStage = {
-            status: 'completed', // Chỉ lấy đơn hàng đã hoàn thành
+            status: 'paid', // Chỉ lấy đơn hàng đã hoàn thành
         };
     
         const revenueReport = await Order.aggregate([
@@ -51,7 +51,7 @@ class ReportService {
                 $gte: new Date(startDate),
                 $lte: new Date(endDate),
             },
-            status: 'completed', // Chỉ lấy đơn hàng đã hoàn thành
+            status: 'paid', // Chỉ lấy đơn hàng đã hoàn thành
         };
 
         const productsReport = await Order.aggregate([
@@ -70,7 +70,7 @@ class ReportService {
 
     async getTotalProductsReportAllTime() {
         const matchStage = {
-            status: 'completed', // Chỉ lấy đơn hàng đã hoàn thành
+            status: 'paid', // Chỉ lấy đơn hàng đã hoàn thành
         };
 
         const productsReport = await Order.aggregate([
@@ -433,6 +433,85 @@ async getTopProductsWeeklyReport(year, month, topCount) {
     return topProducts;
 }
 
+
+async getAnnualSummaryReport() {
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: currentYear - 2022 }, (_, i) => 2023 + i); // Tạo danh sách năm từ 2023 đến năm hiện tại
+
+    const summaryReport = await Promise.all(years.map(async (year) => {
+        const matchStage = {
+            createdAt: { 
+                $gte: new Date(`${year}-01-01`), 
+                $lte: new Date(`${year}-12-31`),
+            },
+            status: 'paid', // Chỉ lấy đơn hàng đã hoàn thành
+        };
+
+        const annualReport = await Order.aggregate([
+            { $match: matchStage },
+            { $unwind: "$items" }, // Phân tách mảng sản phẩm trong từng đơn hàng
+            {
+                $group: {
+                    _id: null,
+                    revenue: { $sum: { $multiply: ["$items.quantity", "$items.price"] } }, // Tổng doanh thu
+                    sales: { $sum: "$items.quantity" }, // Tổng số lượng sản phẩm
+                },
+            },
+            {
+                $project: {
+                    revenue: 1,
+                    sales: 1,
+                    _id: 0,
+                },
+            },
+        ]);
+
+        return {
+            year,
+            revenue: annualReport[0]?.revenue || 0, // Doanh thu cho năm
+            sales: annualReport[0]?.sales || 0,     // Số lượng sản phẩm bán trong năm
+        };
+    }));
+
+    return summaryReport;
+}
+
+async getRevenueByCity() {
+    // Lấy ngày bắt đầu từ 2023-01-01 và ngày hiện tại
+    const startDate = new Date("2023-01-01");
+    const endDate = new Date();
+
+    // Điều kiện lọc theo ngày và trạng thái đơn hàng
+    const matchStage = {
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate,
+        },
+        status: 'paid', // Chỉ lấy đơn hàng đã hoàn thành
+    };
+
+    const revenueByCity = await Order.aggregate([
+        { $match: matchStage },
+        {
+            $group: {
+                _id: "$city", // Nhóm theo thành phố (city)
+                totalRevenue: { $sum: "$totalAmount" }, // Tính tổng doanh thu
+                totalOrders: { $sum: 1 }, // Đếm tổng số đơn hàng
+            },
+        },
+        {
+            $project: {
+                city: "$_id", // Lấy tên tỉnh từ `_id`
+                totalRevenue: 1,
+                totalOrders: 1,
+                _id: 0, // Loại bỏ `_id` khỏi kết quả trả về
+            },
+        },
+        { $sort: { totalRevenue: -1 } }, // Sắp xếp theo doanh thu giảm dần
+    ]);
+
+    return revenueByCity; // Trả về danh sách doanh thu theo tỉnh
+}
 
 
 

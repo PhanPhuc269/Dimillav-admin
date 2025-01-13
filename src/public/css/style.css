@@ -295,3 +295,17 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+.sidebar .nav-link {
+    color: var(--light);
+    padding: 10px 20px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: var(--primary);
+    background: var(--dark);
+    border-color: var(--primary);
+    font-weight: bold;
+}
