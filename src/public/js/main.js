@@ -29,6 +29,9 @@ document.addEventListener('DOMContentLoaded', function() {
         'account': 'account',
         'product': 'products',
 
+        'report': 'report',
+        'inventory': 'inventory',
+
     };
 
     const menuItem = menuMap[currentPath];

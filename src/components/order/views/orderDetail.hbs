@@ -1,7 +1,12 @@
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary rounded p-4">
+
 <body>
    
 
     <!-- Order Details Section -->
+
     <section class="order_details_area section_gap">
         <div class="container">
             <h2 class="text-center mb-4 text-primary">Order Details</h2>
@@ -26,6 +31,45 @@
                 </div>
             </div>
 
+
+            <!-- Danh sách sản phẩm -->
+       <h3 class="text-center">Sản phẩm trong đơn hàng</h3>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-nowrap">Hình ảnh</th>
+                        <th class="text-nowrap">Tên sản phẩm</th>
+                        <th class="text-nowrap">Thương hiệu</th>
+                        <th class="text-nowrap">Danh mục</th>
+                        <th class="text-nowrap">Màu sắc</th>
+                        <th class="text-nowrap">Mô tả</th>
+                        <th class="text-nowrap">Giá</th>
+                        <th class="text-nowrap">Số lượng</th>
+                        <th class="text-nowrap">Thành tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each order.items}}
+                    <tr>
+                        <td class="text-left">
+                            <img src="/{{this.productId.image}}" alt="{{this.productId.name}}" class="img-fluid" style="width: 100px; height: auto;">
+                        </td>
+                        <td>{{this.productId.name}}</td>
+                        <td>{{this.productId.brand}}</td>
+                        <td>{{this.productId.category}}</td>
+                        <td>{{this.productId.color}}</td>
+                        <td>{{this.productId.description}}</td>
+                        <td>${{this.productId.price}}</td>
+                        <td class="text-center">{{this.quantity}}</td>
+                        <td>${{ multiply this.quantity this.productId.price }}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        </div>
+
             <!-- Customer Information -->
             <div class="card shadow-sm mb-5">
                 <div class="card-header bg-info text-white">
@@ -45,6 +89,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Product List -->
             <div class="card shadow-sm">
@@ -98,4 +143,5 @@
             </div>
         </div>
     </section>
-</body>
+    </div>
+</div>
