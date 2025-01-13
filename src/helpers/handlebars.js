@@ -86,4 +86,12 @@ module.exports={
     getFileName: (url)=> {
         return url.split('/').pop();
     },
+     // Helper mới: getFirstImage
+     getFirstImage: (images) => {
+      return images && images.length > 0 ? images[0] : '/path/to/default-image.jpg';
+    },
+     // Helper mới: formatCurrency
+     formatCurrency: function (amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    },
 }

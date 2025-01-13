@@ -1,4 +1,25 @@
 
+
+document.addEventListener('DOMContentLoaded', function () {
+    let currentPath = window.location.pathname;
+
+    // Loại bỏ dấu `/` cuối URL nếu có
+    // if (currentPath.endsWith('/')) {
+    //     currentPath = currentPath.slice(0, -1);
+    // }
+
+    console.log('Current Path:', currentPath);
+
+    const menuMap = {
+        '/': { id: 'menu-dashboard' },
+        '/account': { id: 'menu-account' },
+        '/orders': { id: 'menu-orders' },
+        '/product/list': { id: 'menu-product-list', parentId: 'menu-products' },
+        '/product/create': { id: 'menu-product-create', parentId: 'menu-products' },
+        '/report/revenue': { id: 'menu-report-revenue', parentId: 'menu-reports' },
+        '/report/sales': { id: 'menu-report-sales', parentId: 'menu-reports' },
+        '/report/topProducts': { id: 'menu-report-topProducts', parentId: 'menu-reports' },
+
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
     const page = path.split("/")[1];
@@ -7,14 +28,32 @@ document.addEventListener('DOMContentLoaded', function() {
         '': 'dashboard',
         'account': 'account',
         'product': 'products',
+
         'report': 'report',
         'inventory': 'inventory',
+
     };
 
-    if (menuItems[page]) {
-        document.getElementById(menuItems[page]).classList.add('active');
+    const menuItem = menuMap[currentPath];
+    if (menuItem) {
+        console.log('Active Menu Item:', menuItem);
+
+        // Đánh dấu mục con
+        if (menuItem.id) {
+            document.getElementById(menuItem.id).classList.add('active');
+        }
+
+        // Đánh dấu mục cha nếu có
+        if (menuItem.parentId) {
+            document.getElementById(menuItem.parentId).classList.add('active');
+        }
+    } else {
+        console.warn('Không tìm thấy menu tương ứng với đường dẫn:', currentPath);
     }
 });
+
+
+
 
 (function ($) {
     "use strict";
@@ -83,58 +122,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Worldwide Sales Chart
-    var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
-    var myChart1 = new Chart(ctx1, {
-        type: "bar",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "USA",
-                    data: [15, 30, 55, 65, 60, 80, 95],
-                    backgroundColor: "rgba(235, 22, 22, .7)"
-                },
-                {
-                    label: "UK",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(235, 22, 22, .5)"
-                },
-                {
-                    label: "AU",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(235, 22, 22, .3)"
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
-    });
+    // var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
+    // var myChart1 = new Chart(ctx1, {
+    //     type: "bar",
+    //     data: {
+    //         labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+    //         datasets: [{
+    //                 label: "USA",
+    //                 data: [15, 30, 55, 65, 60, 80, 95],
+    //                 backgroundColor: "rgba(235, 22, 22, .7)"
+    //             },
+    //             {
+    //                 label: "UK",
+    //                 data: [8, 35, 40, 60, 70, 55, 75],
+    //                 backgroundColor: "rgba(235, 22, 22, .5)"
+    //             },
+    //             {
+    //                 label: "AU",
+    //                 data: [12, 25, 45, 55, 65, 70, 60],
+    //                 backgroundColor: "rgba(235, 22, 22, .3)"
+    //             }
+    //         ]
+    //         },
+    //     options: {
+    //         responsive: true
+    //     }
+    // });
 
 
-    // Salse & Revenue Chart
-    var ctx2 = $("#salse-revenue").get(0).getContext("2d");
-    var myChart2 = new Chart(ctx2, {
-        type: "line",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(235, 22, 22, .7)",
-                    fill: true
-                },
-                {
-                    label: "Revenue",
-                    data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(235, 22, 22, .5)",
-                    fill: true
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
-    });
+    // // Salse & Revenue Chart
+    // var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+    // var myChart2 = new Chart(ctx2, {
+    //     type: "line",
+    //     data: {
+    //         labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
+    //         datasets: [{
+    //                 label: "Salse",
+    //                 data: [15, 30, 55, 45, 70, 65, 85],
+    //                 backgroundColor: "rgba(235, 22, 22, .7)",
+    //                 fill: true
+    //             },
+    //             {
+    //                 label: "Revenue",
+    //                 data: [99, 135, 170, 130, 190, 180, 270],
+    //                 backgroundColor: "rgba(235, 22, 22, .5)",
+    //                 fill: true
+    //             }
+    //         ]
+    //         },
+    //     options: {
+    //         responsive: true
+    //     }
+    // });
     
 
 
