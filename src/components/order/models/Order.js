@@ -5,27 +5,24 @@ const OrderSchema = new mongoose.Schema({
     customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    //companyName: { type: String, required: false },
     phoneNumber: { type: String, required: true },
     email: { type: String, required: true },
-    //country: { type: String, required: true },
     addressLine1: { type: String, required: true },
     addressLine2: { type: String, required: false },
     city: { type: String, required: true },
     district: { type: String, required: true },
     zip: { type: String, required: true },
-    //createAccount: { type: Boolean, default: false },
-   // shipToDifferentAddress: { type: Boolean, default: false },
     orderNotes: { type: String, required: false },
-    //couponCode: { type: String, required: false },
     items: [{
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
-        quantity: { type: Number, required: true },
-        price: { type: Number, required: true }
+        size: { type: Number, required: true }, // Kích thước sản phẩm
+        color: { type: String, required: true }, // Màu sắc sản phẩm
+        quantity: { type: Number, required: true }, // Số lượng sản phẩm
+        price: { type: Number, required: true } // Giá sản phẩm
     }],
     totalAmount: { type: Number, required: true },
-    shippingFee: { type: Number, default: 50 },
-    status: { type: String, default: 'pending' }, // Status của đơn hàng
+    shippingFee: { type: Number, default: 0 },
+    status: { type: String, default: 'pending' }, // Trạng thái của đơn hàng
     createdAt: { type: Date, default: Date.now }
 });
 

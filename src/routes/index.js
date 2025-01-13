@@ -15,7 +15,7 @@ function router(app)
    app.use('/auth', authRoute);
    app.use('/pages', pagesRoute);
    app.use('/setting', settingRouter);
-   app.use('/order', orderRouter);
+   app.use('/orders', orderRouter);
    app.use('/product', productRouter);
    app.use('/report', reportRouter);
    app.use('/account', accountRoute);

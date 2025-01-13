@@ -12,7 +12,7 @@
                         <a href="/home">Home<span class="lnr lnr-arrow-right"></span></a>
                         <a href="/single-product">Checkout</a>
                     </nav>
-                </div>
+                </div> 
             </div>
         </div>
     </section>
@@ -21,79 +21,13 @@
     <!--================Checkout Area =================-->
     <section class="checkout_area section_gap">
         <div class="container">
-            {{!-- <div class="returning_customer">
-                <div class="check_title">
-                    <h2>Returning Customer? <a href="/login">Click here to login</a></h2>
-                </div>
-                <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new
-                    customer, please proceed to the Billing & Shipping section.</p>
-                <form class="row contact_form" action="#" method="post" novalidate="novalidate">
-                    <div class="col-md-6 form-group p_star">
-                        <input type="text" class="form-control" id="name" name="name">
-                        <span class="placeholder" data-placeholder="Username or Email"></span>
-                    </div>
-                    <div class="col-md-6 form-group p_star">
-                        <input type="password" class="form-control" id="password" name="password">
-                        <span class="placeholder" data-placeholder="Password"></span>
-                    </div>
-                    <div class="col-md-12 form-group">
-                        <button type="submit" value="submit" class="primary-btn">login</button>
-                        <div class="creat_account">
-                            <input type="checkbox" id="f-option" name="selector">
-                            <label for="f-option">Remember me</label>
-                        </div>
-                        <a class="lost_pass" href="#">Lost your password?</a>
-                    </div>
-                </form>
-            </div> --}}
+          
           
             <div class="billing_details">
                 <div class="row">
                     <div class="col-lg-8">
                         <h3>Billing Details</h3>
-                     {{!-- <form class="row contact_form" id="checkout-form" action="/order/checkout" method="post" novalidate="novalidate">
-    <div class="col-md-6 form-group p_star">
-        <input type="text" class="form-control" id="firstName" name="firstName" required>
-        <span class="placeholder" data-placeholder="First name"></span>
-    </div>
-    <div class="col-md-6 form-group p_star">
-        <input type="text" class="form-control" id="lastName" name="lastName" required>
-        <span class="placeholder" data-placeholder="Last name"></span>
-    </div>
-    <div class="col-md-6 form-group p_star">
-        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-        <span class="placeholder" data-placeholder="Phone number"></span>
-    </div>
-    <div class="col-md-6 form-group p_star">
-        <input type="email" class="form-control" id="email" name="email" required>
-        <span class="placeholder" data-placeholder="Email Address"></span>
-    </div>
-    <div class="col-md-12 form-group p_star">
-        <input type="text" class="form-control" id="add1" name="addressLine1" required>
-        <span class="placeholder" data-placeholder="Address line 01"></span>
-    </div>
-    <div class="col-md-12 form-group p_star">
-        <input type="text" class="form-control" id="add2" name="addressLine2">
-        <span class="placeholder" data-placeholder="Address line 02"></span>
-    </div>
-    <div class="col-md-12 form-group p_star">
-        <input type="text" class="form-control" id="city" name="city" required>
-        <span class="placeholder" data-placeholder="Town/City"></span>
-    </div>
-    <div class="col-md-12 form-group p_star">
-        <input type="text" class="form-control" id="district" name="district" required>
-        <span class="placeholder" data-placeholder="District"></span>
-    </div>
-    <div class="col-md-12 form-group">
-        <input type="text" class="form-control" id="zip" name="zip" required placeholder="Postcode/ZIP">
-    </div>
-    <div class="col-md-12 form-group">
-        <textarea class="form-control" name="orderNotes" id="message" rows="1" placeholder="Order Notes"></textarea>
-    </div>
-    <div class="col-md-12 form-group">
-        <button type="submit" class="primary-btn">Place Order</button>
-    </div>
-                        </form> --}}
+                  
                             <form class="row contact_form" id="checkout-form" action="/order/checkout" method="post" novalidate="novalidate">
                         <div class="col-md-6 form-group p_star">
                             <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First name" required>
@@ -110,9 +44,9 @@
                         <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="add1" name="addressLine1" placeholder="Address line 01" required>
                         </div>
-                        <div class="col-md-12 form-group p_star">
+                        {{!-- <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="add2" name="addressLine2" placeholder="Address line 02">
-                        </div>
+                        </div> --}}
                         <div class="col-md-12 form-group p_star">
                             <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required>
                         </div>
@@ -131,54 +65,23 @@
                     </form>
 
 
-                          {{!-- <div class="cupon_area">
-                <div class="check_title">
-                    <h2>Have a coupon? <a href="#">Click here to enter your code</a></h2>
-                </div>
-                <input type="text" placeholder="Enter coupon code">
-                <a class="tp_btn" href="#">Apply Coupon</a>
-            </div> --}}
+                    
                     </div>
                     <div class="col-lg-4">
-                        <div class="order_box">
-                           <h2>Your Order</h2>
-                            <ul class="list" id="order-items">
-                                <!-- Dữ liệu sản phẩm sẽ được thêm bằng JavaScript -->
-                            </ul>
-                            <ul class="list list_2">
-                                <li><a href="#">Subtotal <span id="subtotal"></span></a></li>
-                                <li><a href="#">Shipping <span id="shipping">Flat rate: $50.00</span></a></li>
-                                <li><a href="#">Total <span id="total"></span></a></li>
-                            </ul>
-
-                            {{!-- <div class="payment_item">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option5" name="selector">
-                                    <label for="f-option5">Check payments</label>
-                                    <div class="check"></div>
-                                </div>
-                                <p>Please send a check to Store Name, Store Street, Store Town, Store State / County,
-                                    Store Postcode.</p>
-                            </div>
-                            <div class="payment_item active">
-                                <div class="radion_btn">
-                                    <input type="radio" id="f-option6" name="selector">
-                                    <label for="f-option6">Paypal </label>
-                                    <img src="img/product/card.jpg" alt="">
-                                    <div class="check"></div>
-                                </div>
-                                <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal
-                                    account.</p>
-                            </div>
-                            <div class="creat_account">
-                                <input type="checkbox" id="f-option4" name="selector">
-                                <label for="f-option4">I’ve read and accept the </label>
-                                <a href="#">terms & conditions*</a>
-                            </div>
-                            <a class="primary-btn" href="#">Proceed to Paypal</a>
-                        </div> --}}
+                   <div class="order_box">
+                        <h2>Your Order</h2>
+                        <ul class="list" id="order-items" style="list-style-type: none; padding: 0;">
+                            <!-- Dữ liệu sản phẩm sẽ được thêm bằng JavaScript -->
+                        </ul>
+                        <ul class="list list_2">
+                            <li><a href="#">Subtotal <span id="subtotal"></span></a></li>
+                            <li><a href="#">Shipping <span id="shipping">Free</span></a></li>
+                            <li><a href="#">Total <span id="total"></span></a></li>
+                        </ul>
                     </div>
+
                 </div>
+
             </div>
         </div>
     </section>
@@ -187,107 +90,7 @@
 <script src="/js/cart/cart.js" defer></script>
 <script src="/js/cart/syncCart.js" defer></script>
 <script src="/js/cart/syncUpdateCart.js" defer></script>
-<script>
 
 
-document.addEventListener("DOMContentLoaded", () => {
-   const locations = {
-    "Hà Nội": ["Ba Đình", "Hoàn Kiếm", "Hai Bà Trưng", "Đống Đa", "Cầu Giấy", "Thanh Xuân", "Hoàng Mai", "Long Biên", "Bắc Từ Liêm", "Nam Từ Liêm", "Hà Đông", "Sóc Sơn", "Đông Anh", "Gia Lâm", "Thanh Trì", "Mê Linh", "Sơn Tây", "Ba Vì", "Phúc Thọ", "Đan Phượng", "Hoài Đức", "Quốc Oai", "Thạch Thất", "Chương Mỹ", "Thanh Oai", "Thường Tín", "Phú Xuyên", "Ứng Hòa", "Mỹ Đức"],
-    "Hồ Chí Minh": ["Quận 1", "Quận 3", "Quận 4", "Quận 5", "Quận 6", "Quận 7", "Quận 8", "Quận 10", "Quận 11", "Quận 12", "Thủ Đức", "Bình Tân", "Tân Bình", "Tân Phú", "Phú Nhuận", "Gò Vấp", "Bình Thạnh", "Hóc Môn", "Củ Chi", "Bình Chánh", "Nhà Bè", "Cần Giờ"],
-    "Đà Nẵng": ["Hải Châu", "Thanh Khê", "Sơn Trà", "Ngũ Hành Sơn", "Liên Chiểu", "Cẩm Lệ", "Hòa Vang", "Hoàng Sa"],
-    "Hải Phòng": ["Hồng Bàng", "Ngô Quyền", "Lê Chân", "Kiến An", "Hải An", "Đồ Sơn", "Dương Kinh", "Thủy Nguyên", "An Dương", "An Lão", "Kiến Thụy", "Tiên Lãng", "Vĩnh Bảo", "Cát Hải", "Bạch Long Vĩ"],
-    "Cần Thơ": ["Ninh Kiều", "Bình Thủy", "Cái Răng", "Ô Môn", "Thốt Nốt", "Phong Điền", "Cờ Đỏ", "Thới Lai", "Vĩnh Thạnh"],
-    "Bà Rịa - Vũng Tàu": ["Vũng Tàu", "Bà Rịa", "Châu Đức", "Xuyên Mộc", "Long Điền", "Đất Đỏ", "Tân Thành", "Côn Đảo"],
-    "Bình Dương": ["Thủ Dầu Một", "Thuận An", "Dĩ An", "Tân Uyên", "Bến Cát", "Phú Giáo", "Dầu Tiếng", "Bắc Tân Uyên"],
-    "Quảng Ninh": ["Hạ Long", "Cẩm Phả", "Móng Cái", "Uông Bí", "Đông Triều", "Quảng Yên", "Vân Đồn", "Tiên Yên", "Bình Liêu", "Đầm Hà", "Hải Hà", "Ba Chẽ", "Cô Tô"],
-    "Khánh Hòa": ["Nha Trang", "Cam Ranh", "Ninh Hòa", "Vạn Ninh", "Diên Khánh", "Khánh Vĩnh", "Khánh Sơn", "Trường Sa"],
-    "Đồng Nai": ["Biên Hòa", "Long Khánh", "Vĩnh Cửu", "Trảng Bom", "Thống Nhất", "Cẩm Mỹ", "Long Thành", "Xuân Lộc", "Nhơn Trạch"],
-    "Lâm Đồng": ["Đà Lạt", "Bảo Lộc", "Lạc Dương", "Đơn Dương", "Đức Trọng", "Lâm Hà", "Di Linh", "Bảo Lâm", "Đạ Huoai", "Đạ Tẻh", "Cát Tiên"],
-    "Thanh Hóa": ["Thanh Hóa", "Bỉm Sơn", "Sầm Sơn", "Thọ Xuân", "Quảng Xương", "Hoằng Hóa", "Hậu Lộc", "Nga Sơn", "Tĩnh Gia", "Cẩm Thủy", "Thạch Thành", "Hà Trung", "Nông Cống", "Như Thanh", "Như Xuân", "Triệu Sơn", "Yên Định"],
-    "Nghệ An": ["Vinh", "Cửa Lò", "Thái Hòa", "Hoàng Mai", "Quỳnh Lưu", "Diễn Châu", "Yên Thành", "Nghi Lộc", "Hưng Nguyên", "Nam Đàn", "Con Cuông", "Tương Dương", "Kỳ Sơn", "Quế Phong", "Quỳ Châu", "Quỳ Hợp", "Nghĩa Đàn", "Thanh Chương"],
-    "Hà Tĩnh": ["Hà Tĩnh", "Hồng Lĩnh", "Kỳ Anh", "Cẩm Xuyên", "Thạch Hà", "Hương Sơn", "Hương Khê", "Vũ Quang", "Can Lộc", "Lộc Hà"],
-    "Thừa Thiên Huế": ["Huế", "Hương Trà", "Hương Thủy", "Phong Điền", "Quảng Điền", "Phú Vang", "Phú Lộc", "Nam Đông", "A Lưới"],
-    "Bắc Giang": ["TP Bắc Giang", "Hiệp Hòa", "Lạng Giang", "Lục Ngạn", "Lục Nam", "Sơn Động", "Tân Yên", "Việt Yên", "Yên Dũng"],
-    "Bắc Kạn": ["TP Bắc Kạn", "Ba Bể", "Bạch Thông", "Chợ Đồn", "Chợ Mới", "Na Rì", "Ngân Sơn", "Pác Nặm"],
-    "Bạc Liêu": ["TP Bạc Liêu", "Giá Rai", "Đông Hải", "Hòa Bình", "Hồng Dân", "Phước Long", "Vĩnh Lợi"],
-    "Bắc Ninh": ["TP Bắc Ninh", "Gia Bình", "Lương Tài", "Quế Võ", "Thuận Thành", "Tiên Du", "Từ Sơn", "Yên Phong"],
-    "Bến Tre": ["TP Bến Tre", "Ba Tri", "Bình Đại", "Châu Thành", "Chợ Lách", "Giồng Trôm", "Mỏ Cày Bắc", "Mỏ Cày Nam", "Thạnh Phú"],
-    "Cà Mau": ["TP Cà Mau", "Năm Căn", "Đầm Dơi", "Trần Văn Thời", "Thới Bình", "U Minh", "Cái Nước", "Phú Tân"],
-    "Cao Bằng": ["TP Cao Bằng", "Bảo Lạc", "Bảo Lâm", "Hạ Lang", "Hòa An", "Nguyên Bình", "Quảng Hòa", "Quảng Uyên", "Thạch An", "Trà Lĩnh"],
-    "Đắk Lắk": ["Buôn Ma Thuột", "Buôn Hồ", "Ea H'leo", "Ea Kar", "Cư Kuin", "Krông Năng", "Krông Pắc", "M'Đrắk", "Lắk", "Krông Bông"],
-    "Đắk Nông": ["Gia Nghĩa", "Đắk R'lấp", "Đắk Mil", "Cư Jút", "Krông Nô", "Đắk Song", "Đắk Glong", "Tuy Đức"],
-    "Điện Biên": ["TP Điện Biên Phủ", "Mường Lay", "Mường Chà", "Tủa Chùa", "Mường Nhé", "Điện Biên Đông", "Điện Biên", "Mường Ảng"],
-    "Đồng Tháp": ["TP Cao Lãnh", "Sa Đéc", "Hồng Ngự", "Lấp Vò", "Tam Nông", "Thanh Bình", "Tân Hồng", "Tháp Mười", "Châu Thành", "Huyện Lai Vung"],
-    "Gia Lai": ["Pleiku", "An Khê", "Ayun Pa", "Đức Cơ", "Chư Păh", "Kông Chro", "Mang Yang", "Kông Tum", "Đăk Đoa"],
-    "Hà Giang": ["TP Hà Giang", "Hà Giang", "Quản Bạ", "Yên Minh", "Vị Xuyên", "Mèo Vạc", "Đồng Văn", "Bắc Mê", "Hoàng Su Phì", "Xín Mần"],
-    "Hà Nam": ["TP Phủ Lý", "Duy Tiên", "Kim Bảng", "Lý Nhân", "Thanh Liêm"],
-    "Hải Dương": ["TP Hải Dương", "Chí Linh", "Kinh Môn", "Cẩm Giàng", "Nam Sách", "Kim Thành", "Bình Giang", "Gia Lộc", "Tứ Kỳ"],
-    "Hòa Bình": ["TP Hòa Bình", "Lương Sơn", "Lạc Thủy", "Kim Bôi", "Yên Thủy", "Đà Bắc", "Mai Châu"],
-    "Hưng Yên": ["TP Hưng Yên", "Châu Giang", "Tiên Lữ", "Phù Cừ", "Khoái Châu", "Kim Động", "Văn Lâm", "Mỹ Hào", "Ân Thi"],
-    "Khánh Hòa": ["Nha Trang", "Cam Ranh", "Ninh Hòa", "Vạn Ninh", "Diên Khánh", "Khánh Vĩnh", "Khánh Sơn", "Trường Sa"],
-    "Kiên Giang": ["Rạch Giá", "Phú Quốc", "Hà Tiên", "Kiên Lương", "Hòn Đất", "Châu Thành", "Giồng Riềng", "Gò Quao", "Tân Hiệp", "Vĩnh Thuận"],
-    "Kon Tum": ["TP Kon Tum", "Đăk Tô", "Đăk Hà", "Kon Plông", "Kon Rẫy", "Sa Thầy", "Tu Mơ Rông", "Đăk Glei"],
-    "Lai Châu": ["TP Lai Châu", "Sìn Hồ", "Tân Uyên", "Mường Tè", "Nậm Nhùn", "Phong Thổ", "Than Uyên", "Tam Đường"],
-    "Lạng Sơn": ["TP Lạng Sơn", "Bắc Sơn", "Hữu Lũng", "Tràng Định", "Văn Lãng", "Đình Lập", "Lộc Bình", "Chi Lăng", "Cao Lộc", "Hữu Kiên"],
-    "Long An": ["Tân An", "Cần Giuộc", "Cần Đước", "Đức Hòa", "Bến Lức", "Thủ Thừa", "Tân Thạnh", "Tân Trụ", "Vĩnh Hưng", "Mộc Hóa", "Châu Thành", "Tân Hưng"],
-    "Nam Định": ["TP Nam Định", "Hải Hậu", "Trực Ninh", "Giao Thủy", "Xuân Trường", "Mỹ Lộc", "Vụ Bản", "Nam Trực", "Ý Yên", "Nghĩa Hưng"],
-    "Ninh Bình": ["TP Ninh Bình", "Tam Điệp", "Kim Sơn", "Yên Khánh", "Yên Mô", "Hoa Lư"],
-    "Ninh Thuận": ["Phan Rang - Tháp Chàm", "Đô Vinh", "Ninh Sơn", "Ninh Hải", "Thuận Bắc", "Thuận Nam", "Bác Ái", "Hàm Thuận Bắc"],
-    "Phú Thọ": ["TP Việt Trì", "Lâm Thao", "Cẩm Khê", "Tân Sơn", "Thanh Sơn", "Đoan Hùng", "Yên Lập", "Hạ Hòa", "Tam Nông", "Phù Ninh"],
-    "Phú Yên": ["TP Tuy Hòa", "Sông Cầu", "Đông Hòa", "Tuy An", "Phú Hòa", "Sơn Hòa", "Sông Hinh", "Tây Hòa"],
-    "Quảng Bình": ["TP Đồng Hới", "Ba Đồn", "Quảng Trạch", "Bố Trạch", "Quảng Ninh", "Lệ Thủy", "Minh Hóa", "Tuyên Hóa"],
-    "Quảng Nam": ["TP Tam Kỳ", "Hội An", "Điện Bàn", "Tam Kỳ", "Thăng Bình", "Duy Xuyên", "Quế Sơn", "Phú Ninh", "Nông Sơn", "Nam Giang", "Nam Trà My", "Bắc Trà My", "Tiên Phước", "Hiệp Đức"],
-    "Quảng Ngãi": ["TP Quảng Ngãi", "Sơn Tịnh", "Tư Nghĩa", "Trà Bồng", "Ba Tơ", "Minh Long", "Mộ Đức", "Đức Phổ", "Lý Sơn", "Sơn Hà", "Sơn Tây", "Nghĩa Hành"],
-    "Quảng Ninh": ["TP Hạ Long", "Cẩm Phả", "Móng Cái", "Uông Bí", "Đông Triều", "Quảng Yên", "Vân Đồn", "Tiên Yên", "Bình Liêu", "Đầm Hà", "Hải Hà", "Ba Chẽ", "Cô Tô"],
-    "Sóc Trăng": ["TP Sóc Trăng", "Vĩnh Châu", "Ngã Năm", "Châu Thành", "Cù Lao Dung", "Mỹ Tú", "Kế Sách", "Long Phú"],
-    "Sơn La": ["TP Sơn La", "Mộc Châu", "Mai Sơn", "Yên Châu", "Quỳnh Nhai", "Phù Yên", "Sông Mã", "Sốp Cộp", "Mường La", "Thuận Châu"],
-    "Tây Ninh": ["TP Tây Ninh", "Hòa Thành", "Tân Biên", "Tân Châu", "Dương Minh Châu", "Bến Cầu", "Châu Thành"],
-    "Thái Bình": ["TP Thái Bình", "Hưng Hà", "Kiến Xương", "Quỳnh Phụ", "Vũ Thư", "Thái Thụy", "Tiền Hải", "Đông Hưng"],
-    "Thái Nguyên": ["TP Thái Nguyên", "Sông Công", "Phổ Yên", "Đồng Hỷ", "Định Hóa", "Phú Bình", "Võ Nhai", "Đại Từ"],
-    "Thanh Hóa": ["TP Thanh Hóa", "Bỉm Sơn", "Sầm Sơn", "Thọ Xuân", "Quảng Xương", "Hoằng Hóa", "Hậu Lộc", "Nga Sơn", "Tĩnh Gia", "Cẩm Thủy", "Thạch Thành", "Hà Trung", "Nông Cống", "Như Thanh", "Như Xuân", "Triệu Sơn", "Yên Định"],
-    "Thừa Thiên Huế": ["TP Huế", "Hương Trà", "Hương Thủy", "Phong Điền", "Quảng Điền", "Phú Vang", "Phú Lộc", "Nam Đông", "A Lưới"],
-    "Tiền Giang": ["TP Mỹ Tho", "Cai Lậy", "Cái Bè", "Châu Thành", "Gò Công Tây", "Gò Công Đông", "Tân Phước", "Chợ Gạo", "Tân Phú Đông"],
-    "Trà Vinh": ["TP Trà Vinh", "Duyên Hải", "Càng Long", "Cầu Kè", "Tiểu Cần", "Châu Thành", "Trà Cú", "Duyên Hải"],
-    "Tuyên Quang": ["TP Tuyên Quang", "Yên Sơn", "Chiêm Hóa", "Hàm Yên", "Lâm Bình", "Na Hang", "Sơn Dương"],
-    "Vĩnh Long": ["TP Vĩnh Long", "Tam Bình", "Trà Ôn", "Vũng Liêm", "Long Hồ", "Mang Thít", "Tam Hiệp"],
-    "Vĩnh Phúc": ["TP Vĩnh Yên", "Vĩnh Tường", "Lập Thạch", "Tam Đảo", "Sông Lô", "Yên Lạc", "Bình Xuyên", "Võ Nhai"],
-    "Yên Bái": ["TP Yên Bái", "Lục Yên", "Yên Bình", "Trấn Yên", "Văn Chấn", "Văn Yên", "Mù Cang Chải", "Trạm Tấu"],
-    "Phú Yên": ["TP Tuy Hòa", "Sông Cầu", "Đông Hòa", "Tuy An", "Phú Hòa", "Sơn Hòa", "Sông Hinh", "Tây Hòa"],
-    "Cà Mau": ["TP Cà Mau", "Năm Căn", "Đầm Dơi", "Trần Văn Thời", "Thới Bình", "U Minh", "Cái Nước", "Phú Tân"]
-};
-
-
-   const citySelect = document.getElementById("city");
-    const districtSelect = document.getElementById("district");
-
-    // Tạo danh sách tỉnh/thành phố
-    for (const city in locations) {
-        const option = document.createElement("option");
-        option.value = city;
-        option.textContent = city;
-        citySelect.appendChild(option);
-       
-    }
-
-    // Lắng nghe sự kiện khi chọn tỉnh/thành phố
-    citySelect.addEventListener("onchange", (event) => {
-        const selectedCity = event.target.value;
-        console.log(selectedCity);
-        // Reset danh sách quận/huyện và bật danh sách quận/huyện
-        districtSelect.innerHTML = `<option value="" disabled selected>Chọn Quận/Huyện</option>`;
-        districtSelect.disabled = false;
-
-        // Thêm quận/huyện dựa trên tỉnh/thành phố được chọn
-        if (locations[selectedCity]) {
-            locations[selectedCity].forEach((district) => {
-                const option = document.createElement("option");
-                option.value = district;
-                option.textContent = district;
-                districtSelect.appendChild(option);
-            });
-        }
-    });
-});
-</script>
 
 </body>
