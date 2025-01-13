@@ -2,7 +2,7 @@
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
         <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Inventory Management</h6>
+            <h4 class="mb-0">Inventory Management</h4>
             <div class="d-flex">
                 <select class="form-control-sm form-select w-50 select-category ms-5" aria-label="Default select example" name="category">
                     <option value="">Danh mục</option>
@@ -49,8 +49,19 @@
                         <td>{{../slug}}-{{this.color}}-{{this.size}}</td>
                         <td>{{../salePrice}}</td>
                         <td>
-                            <button class="btn btn-sm btn-primary restock-button" data-id="{{../_id}}" data-name="{{../name}}" data-category="{{../category}}" data-brand="{{../brand}}" data-size="{{this.size}}" data-color="{{this.color}}" data-quantity="{{this.quantity}}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
-                            <button class="btn btn-sm btn-danger delete-button" data-id="{{../_id}}" data-size="{{this.size}}" data-color="{{this.color}}">Xóa</button>
+                            <button class="btn btn-sm btn-success restock-button" data-id="{{../_id}}" data-name="{{../name}}" data-category="{{../category}}" data-brand="{{../brand}}" data-size="{{this.size}}" data-color="{{this.color}}" data-quantity="{{this.quantity}}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
+                            <button 
+                                class="btn btn-sm btn-danger delete-button" 
+                                data-id="{{../_id}}"     
+                                data-index="{{@index}}" 
+                                data-name="{{../name}}" 
+                                data-color="{{this.color}}" 
+                                data-size="{{this.size}}" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#confirm-delete-modal"
+                            >
+                                Xóa
+                            </button>
                         </td>
                     </tr>
                     {{/each}}
@@ -118,5 +129,31 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Confirm Delete -->
+<div class="modal fade" id="confirm-delete-modal" tabindex="-1" aria-labelledby="confirm-delete-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa mẫu hàng này không?</p>
+                <ul>
+                    <li><strong>Tên sản phẩm:</strong> <span id="delete-product-name"></span></li>
+                    <li><strong>Màu sắc:</strong> <span id="delete-product-color"></span></li>
+                    <li><strong>Size:</strong> <span id="delete-product-size"></span></li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" id="btn-confirm-delete" class="btn btn-danger">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <script src="/js/view-inventory.js"></script>

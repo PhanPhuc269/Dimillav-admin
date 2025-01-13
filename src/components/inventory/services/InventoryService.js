@@ -192,6 +192,24 @@ class AccountService {
             throw new Error('Error restocking product: ' + error.message);
         }
     }
+
+    // Xóa mẫu hàng
+    async deleteProduct(productId, index) {
+        try {
+            const product = await Product.findById(productId);
+            if (!product) {
+                throw new Error('Product not found');
+            }
+
+            product.stock.splice(index, 1);
+            await product.save();
+
+            return product;
+        } catch (error) {
+            throw new Error('Error deleting product: ' + error.message);
+        }
+    }
+
 }
 
 module.exports = new AccountService();

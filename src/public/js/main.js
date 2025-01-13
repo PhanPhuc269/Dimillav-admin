@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'account': 'account',
         'product': 'products',
         'report': 'report',
+        'inventory': 'inventory',
     };
 
     if (menuItems[page]) {

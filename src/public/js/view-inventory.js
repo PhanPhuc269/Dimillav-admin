@@ -258,3 +258,60 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function () {
+    let deleteProductId = null;
+    let deleteProductIndex = null;
+
+    const confirmDeleteModal = document.getElementById('confirm-delete-modal');
+
+    // Khi modal hiển thị
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Nút kích hoạt modal
+        deleteProductId = button.getAttribute('data-id');
+        deleteProductIndex = button.getAttribute('data-index');
+        const productName = button.getAttribute('data-name');
+        const productColor = button.getAttribute('data-color');
+        const productSize = button.getAttribute('data-size');
+
+        // Hiển thị thông tin trong modal
+        document.getElementById('delete-product-name').textContent = productName;
+        document.getElementById('delete-product-color').textContent = productColor;
+        document.getElementById('delete-product-size').textContent = productSize;
+    });
+
+    // Khi người dùng xác nhận xóa
+    document.getElementById('btn-confirm-delete').addEventListener('click', function () {
+        if (deleteProductId && deleteProductIndex !== null) {
+            // Gửi yêu cầu xóa đến server
+            fetch(`/inventory/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: deleteProductId,
+                    index: deleteProductIndex, // Gửi chỉ số đến server
+                }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('Xóa thành công!', 'success', 'Success');
+                        // Reload lại bảng hoặc xóa dòng hiện tại khỏi giao diện
+                        location.reload();
+                    } else {
+                        showToast('Xóa thất bại', 'error', 'Error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showToast('Có lỗi xảy ra khi xóa!', 'error', 'Error');
+                })
+                .finally(() => {
+                    // Đóng modal sau khi xóa
+                    const modalInstance = bootstrap.Modal.getInstance(confirmDeleteModal);
+                    modalInstance.hide();
+                });
+        }
+    });
+});

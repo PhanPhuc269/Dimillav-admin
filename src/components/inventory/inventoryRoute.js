@@ -24,6 +24,7 @@ function sortMiddleware (req,res, next){
 
 router.get('/',sortMiddleware, inventoryController.viewInventory); 
 router.post('/restock', inventoryController.restockProduct);
+router.post('/delete', inventoryController.deleteProduct);
 
 
 
