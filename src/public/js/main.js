@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
     const page = path.split("/")[1];
+    const subpage = path.split("/")[2];
 
     const menuItems = {
         '': 'dashboard',
@@ -9,10 +10,33 @@ document.addEventListener('DOMContentLoaded', function() {
         'product': 'products',
         'report': 'report',
         'inventory': 'inventory',
+        'order': 'orders',
+
+    };
+
+    const subMenuItems = {
+        'product': {
+            'list': 'list-products',
+            'add': 'add-product',
+            'edit': 'edit-product',
+        },
+        'order': {
+            'list': 'orders',
+            'detail': 'order-detail',
+        },
+        'report': {
+            'sales': 'sales-report',
+            'revenue': 'revenue-report',
+        },
     };
 
     if (menuItems[page]) {
         document.getElementById(menuItems[page]).classList.add('active');
+        document.getElementById(menuItems[page]).classList.add('show-special');
+        
+        if (subMenuItems[page] && subMenuItems[page][subpage]) {
+            document.getElementById(subMenuItems[page][subpage]).classList.add('active-sub');
+        }
     }
 });
 
