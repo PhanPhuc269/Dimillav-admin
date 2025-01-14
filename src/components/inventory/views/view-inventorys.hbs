@@ -47,7 +47,7 @@
                         <td>{{this.size}}</td>
                         <td>{{this.quantity}}</td>
                         <td>{{../slug}}-{{this.color}}-{{this.size}}</td>
-                        <td>{{../salePrice}}</td>
+                        <td>{{formatPrice ../salePrice}}</td>
                         <td>
                             <button class="btn btn-sm btn-success restock-button" data-id="{{../_id}}" data-name="{{../name}}" data-category="{{../category}}" data-brand="{{../brand}}" data-size="{{this.size}}" data-color="{{this.color}}" data-quantity="{{this.quantity}}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
                             <button 

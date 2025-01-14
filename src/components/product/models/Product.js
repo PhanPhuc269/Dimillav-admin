@@ -21,7 +21,7 @@ const Product = new Schema({
     rate: { type: Number },
     warranty: { type: String }, // Bảo hành
     slug: { type: String, unique: true },
-    tags: [{ type: String }], // Từ khóa liên quan đến sản phẩm
+    tags: { type: String }, // Từ khóa liên quan đến sản phẩm
 
     // Trường stock mới
     stock: [{
@@ -49,6 +49,9 @@ Product.pre('save', async function (next) {
         }
 
         this.slug = slug;
+
+        // Tạo từ khóa từ tên sản phẩm và nối thành một chuỗi
+        this.tags = this.name.split(' ').map(word => word.toLowerCase()).join(', ');
     }
     next();
 });

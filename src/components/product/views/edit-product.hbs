@@ -15,10 +15,12 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <input type="text" id="category" name="category" class="form-control" value="{{#if formData.category}}{{formData.category}}{{else}}{{product.category}}{{/if}}" />
-                    {{#if errors.category}}
-                        <div class="alert alert-danger">{{errors.category}}</div>
-                    {{/if}}
+                    <select id="category" value="{{product.category}}" name="category" class="form-control" required>
+                        <option value="" disabled selected>-- Select a category --</option>
+                        {{#each categories}}
+                            <option value="{{this.name}}" {{#if (eq this.name ../product.category)}}selected{{/if}}>{{this.name}}</option>
+                        {{/each}}
+                    </select>
                 </div>
             </div>
         </div>
@@ -35,11 +37,8 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="quantity">Warranty Period:</label>
-                    <input type="text" placeholder="e.g., 2 years, 6 months" id="warranty" name="warranty" class="form-control" value="{{#if formData.warranty}}{{formData.warranty}}{{else}}{{product.warranty}}{{/if}}" />
-                    {{#if errors.quantity}}
-                        <div class="alert alert-danger">{{errors.quantity}}</div>
-                    {{/if}}
+                    <label for="discount">Sale Price:</label>
+                    <input type="number" id="salePrice" name="salePrice" class="form-control" value="{{product.salePrice}}" min="0" required />
                 </div>
             </div>
         </div>
@@ -78,13 +77,22 @@
                     {{/if}}
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="quantity">Warranty Period:</label>
+                    <input type="text" placeholder="e.g., 2 years, 6 months" id="warranty" name="warranty" class="form-control" value="{{#if formData.warranty}}{{formData.warranty}}{{else}}{{product.warranty}}{{/if}}" />
+                    {{#if errors.quantity}}
+                        <div class="alert alert-danger">{{errors.quantity}}</div>
+                    {{/if}}
+                </div>
+            </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea id="description" name="description" class="form-control">{{#if formData.description}}{{formData.description}}{{else}}{{product.description}}{{/if}}</textarea>
+                    <textarea id="description" name="description" class="form-control h-40">{{#if formData.description}}{{formData.description}}{{else}}{{product.description}}{{/if}}</textarea>
                     {{#if errors.description}}
                         <div class="alert alert-danger">{{errors.description}}</div>
                     {{/if}}

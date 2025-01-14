@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${item.slug}-${stock.color}-${stock.size}</td>
                             <td>${item.salePrice}</td>
                             <td>
-                                <button class="btn btn-sm btn-primary restock-button" data-id="${item._id}" data-name="${item.name}" data-category="${item.category}" data-brand="${item.brand}" data-size="${stock.size}" data-color="${stock.color}" data-quantity="${stock.quantity}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
+                                <button class="btn btn-sm btn-success restock-button" data-id="${item._id}" data-name="${item.name}" data-category="${item.category}" data-brand="${item.brand}" data-size="${stock.size}" data-color="${stock.color}" data-quantity="${stock.quantity}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
                                 <button class="btn btn-sm btn-danger delete-button" data-id="${item._id}" data-size="${stock.size}" data-color="${stock.color}">Xóa</button>
                             </td>
                         </tr>

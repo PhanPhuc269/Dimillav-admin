@@ -86,4 +86,8 @@ module.exports={
     getFileName: (url)=> {
         return url.split('/').pop();
     },
+    //Định dạng tiền Việt Nam
+    formatPrice: function (price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    },
 }

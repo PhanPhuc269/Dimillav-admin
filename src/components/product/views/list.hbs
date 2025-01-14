@@ -90,7 +90,7 @@
                                     <img src="{{this.images.[1]}}" alt="{{this.name}}" class="card-img-top img-fluid">
                                     <div class="card-body">
                                         <h5 class="card-title text-primary">{{this.name}}</h5>
-                                        <p class="card-text text-muted mb-1">Price: <span class="fw-bold">{{this.price}}</span> VND</p>
+                                        <p class="card-text text-muted mb-1">Price: <span class="fw-bold">{{ formatPrice this.salePrice}}</span></p>
                                     </div>
                                     <div class="card-footer bg-light d-flex justify-content-between align-items-center">
                                         <a href="/product/update/{{this.slug}}" class="btn btn-outline-primary btn-sm">
@@ -168,7 +168,9 @@
                 alert('Error fetching products.');
             }
         };
-
+        function formatCurrencyVND(amount) {
+            return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        }
         // Function to render products
         const renderProducts = (products) => {
             productList.innerHTML = '';
@@ -176,10 +178,10 @@
                 const productCard = `
                     <div class="col">
                         <div class="card shadow-sm h-100 border-0">
-                            <img src="${product.images[1]}" alt="${product.name}" class="card-img-top img-fluid">
+                            <img src="${product.images[0]}" alt="${product.name}" class="card-img-top img-fluid">
                             <div class="card-body">
                                 <h5 class="card-title text-primary">${product.name}</h5>
-                                <p class="card-text text-muted mb-1">Price: <span class="fw-bold">${product.price}</span> VND</p>
+                                <p class="card-text text-muted mb-1">Price: <span class="fw-bold">${formatCurrencyVND(product.salePrice)}</span></p>
                             </div>
                             <div class="card-footer bg-light d-flex justify-content-between align-items-center">
                                 <a href="/product/update/${product.slug}" class="btn btn-outline-primary btn-sm">
