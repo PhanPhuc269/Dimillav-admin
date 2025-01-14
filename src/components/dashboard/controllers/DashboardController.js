@@ -3,7 +3,7 @@ const { mongooseToObject } = require('@utils/mongoose');
 const session = require('express-session');
 const Order = require("@components/order/models/Order");
 const OrderService = require("@components/order/services/OrderService");
-const ReportService = require("@components/report/services/ReportService");
+const DashboardService = require("@components/dashboard/services/DashboardService");
 
 
 class DashboardController{
@@ -13,7 +13,7 @@ class DashboardController{
             const orders = await OrderService.getAllOrdersSortedByDate();
     
             // Báo cáo tổng doanh thu
-            const report = await ReportService.getRevenueReportAllTime();
+            const report = await DashboardService.getRevenueReportAllTime();
     
             // Ngày hôm nay
             const today = new Date();
@@ -21,20 +21,20 @@ class DashboardController{
             const endOfDay = new Date(today.setHours(23, 59, 59, 999));
     
             // Báo cáo doanh thu hôm nay
-            const reportToday = await ReportService.getRevenueReport(startOfDay, endOfDay);
+            const reportToday = await DashboardService.getRevenueReport(startOfDay, endOfDay);
     
             // Tổng số lượng sản phẩm hôm nay
-            const reportProductToday = await ReportService.getTotalProductsReport(startOfDay, endOfDay);
+            const reportProductToday = await DashboardService.getTotalProductsReport(startOfDay, endOfDay);
     
             // Tổng số lượng sản phẩm từ trước tới nay
-            const reportProduct = await ReportService.getTotalProductsReportAllTime();
+            const reportProduct = await DashboardService.getTotalProductsReportAllTime();
     
             // Báo cáo doanh thu hàng năm
-            const annualSummaryReport = await ReportService.getAnnualSummaryReport();
+            const annualSummaryReport = await DashboardService.getAnnualSummaryReport();
     
             // Báo cáo doanh thu theo tỉnh
           
-            const revenueByCity = await ReportService.getRevenueByCity();
+            const revenueByCity = await DashboardService.getRevenueByCity();
     
             // Kiểm tra dữ liệu trong console (tuỳ chọn)
             console.log('Annual Summary Report:', annualSummaryReport);
