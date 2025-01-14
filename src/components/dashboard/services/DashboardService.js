@@ -1,6 +1,6 @@
 const Order = require('@components/order/models/Order');
 
-class ReportService {
+class DashboardService {
 
 
     async getRevenueReport(startDate, endDate) {
@@ -519,4 +519,4 @@ async getRevenueByCity() {
 
 }
 
-module.exports = new ReportService();
+module.exports = new DashboardService();

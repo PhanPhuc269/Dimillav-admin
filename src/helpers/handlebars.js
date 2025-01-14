@@ -90,4 +90,11 @@ module.exports={
     formatPrice: function (price) {
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     },
+    
+    join: (array, separator = ', ') => {
+      if (Array.isArray(array)) {
+          return array.join(separator);
+      }
+      return '';
+    },
 }

@@ -52,7 +52,7 @@
 					<h6 class="mb-0">Worldwide Sales</h6>
 					<a href="">Show All</a>
 				</div>
-				<canvas id="worldwide-sales"></canvas>
+				<canvas id="provinceChart" width="400" height="200"></canvas>
 			</div>
 		</div>
 		<div class="col-sm-12 col-xl-6">
@@ -61,7 +61,7 @@
 					<h6 class="mb-0">Salse & Revenue</h6>
 					<a href="">Show All</a>
 				</div>
-				<canvas id="salse-revenue"></canvas>
+				<canvas id="combinedChart" width="400" height="200"></canvas>
 			</div>
 		</div>
 	</div>
@@ -76,7 +76,7 @@
 	<div class="bg-secondary text-center rounded p-4">
 		<div class="d-flex align-items-center justify-content-between mb-4">
 			<h6 class="mb-0">Recent Sales</h6>
-			<a href="/order/list">Show All</a>
+			<a href="/orders">Show All</a>
 		</div>
 		<div class="table-responsive">
 			<table class="table text-start align-middle table-bordered table-hover mb-0">
@@ -231,4 +231,12 @@
 	</div>
 </div>
 <!-- Widgets End -->
+<script id="annualSummaryData" type="application/json">
+    {{{annualSummaryReport}}}  
+</script>
+<script id="revenueByCity" type="application/json">
+    {{{revenueByCity}}}  
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/chartReport/chart-sale-revenue.js"></script>
 
