@@ -90,4 +90,12 @@ module.exports={
     formatPrice: function (price) {
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
     },
+     // Helper mới: getFirstImage
+     getFirstImage: (images) => {
+      return images && images.length > 0 ? images[0] : '/path/to/default-image.jpg';
+    },
+     // Helper mới: formatCurrency
+     formatCurrency: function (amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    },
 }
