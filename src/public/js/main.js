@@ -1,50 +1,93 @@
 document.addEventListener('DOMContentLoaded', function () {
     let currentPath = window.location.pathname;
 
-    console.log('Current Path:', currentPath);
-    
 
-    // Map URL path to menu IDs and their parent IDs (if applicable)
-    const menuMap = {
-        '/': { id: 'menu-dashboard' },
-        '/account': { id: 'menu-account' },
-        '/orders': { id: 'menu-orders' },
-        '/inventory': { id: 'menu-inventory' },
-        '/product/list': { id: 'menu-product-list', parentId: 'menu-products' },
-        '/product/create': { id: 'menu-product-create', parentId: 'menu-products' },
-        '/report/revenue': { id: 'menu-report-revenue', parentId: 'menu-reports' },
-        '/report/sales': { id: 'menu-report-sales', parentId: 'menu-reports' },
-        '/report/topProducts': { id: 'menu-report-topProducts', parentId: 'menu-reports' },
+document.addEventListener('DOMContentLoaded', function() {
+    const path = window.location.pathname;
+    const page = path.split("/")[1];
+    const subpage = path.split("/")[2];
+
+    const menuItems = {
+        '': 'dashboard',
+        'account': 'account',
+        'product': 'products',
+        'report': 'report',
+        'inventory': 'inventory',
+        'order': 'orders',
+
     };
 
-     // Highlight active menu
-     const activeMenu = menuMap[currentPath];
-     console.log('activeMenu:', activeMenu);
+    const subMenuItems = {
+        'product': {
+            'list': 'list-products',
+            'add': 'add-product',
+            'edit': 'edit-product',
+        },
+        'order': {
+            'list': 'orders',
+            'detail': 'order-detail',
+        },
+        'report': {
+            'sales': 'sales-report',
+            'revenue': 'revenue-report',
+        },
+    };
 
-     if (activeMenu) {
-         const activeElement = document.getElementById(activeMenu.id);
-         if (activeElement) {
-             activeElement.classList.add('active');
-         }
+    if (menuItems[page]) {
+        document.getElementById(menuItems[page]).classList.add('active');
+        document.getElementById(menuItems[page]).classList.add('show-special');
+        
+        if (subMenuItems[page] && subMenuItems[page][subpage]) {
+            document.getElementById(subMenuItems[page][subpage]).classList.add('active-sub');
+        }
+    }
+});
+// =======
+//     console.log('Current Path:', currentPath);
+    
+
+//     // Map URL path to menu IDs and their parent IDs (if applicable)
+//     const menuMap = {
+//         '/': { id: 'menu-dashboard' },
+//         '/account': { id: 'menu-account' },
+//         '/orders': { id: 'menu-orders' },
+//         '/inventory': { id: 'menu-inventory' },
+//         '/product/list': { id: 'menu-product-list', parentId: 'menu-products' },
+//         '/product/create': { id: 'menu-product-create', parentId: 'menu-products' },
+//         '/report/revenue': { id: 'menu-report-revenue', parentId: 'menu-reports' },
+//         '/report/sales': { id: 'menu-report-sales', parentId: 'menu-reports' },
+//         '/report/topProducts': { id: 'menu-report-topProducts', parentId: 'menu-reports' },
+//     };
+
+//      // Highlight active menu
+//      const activeMenu = menuMap[currentPath];
+//      console.log('activeMenu:', activeMenu);
+
+//      if (activeMenu) {
+//          const activeElement = document.getElementById(activeMenu.id);
+//          if (activeElement) {
+//              activeElement.classList.add('active');
+//          }
  
-         // Highlight parent menu if applicable and keep dropdown open
-         if (activeMenu.parentId) {
-             const parentElement = document.getElementById(activeMenu.parentId);
-             if (parentElement) {
-                 parentElement.classList.add('active'); // Highlight parent
-                 parentElement.classList.add('show'); // Keep dropdown open
+//          // Highlight parent menu if applicable and keep dropdown open
+//          if (activeMenu.parentId) {
+//              const parentElement = document.getElementById(activeMenu.parentId);
+//              if (parentElement) {
+//                  parentElement.classList.add('active'); // Highlight parent
+//                  parentElement.classList.add('show'); // Keep dropdown open
  
-                 // Keep dropdown menu visible
-                 const dropdownMenu = parentElement.nextElementSibling;
-                 if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
-                     dropdownMenu.classList.add('show');
-                 }
-             }
-         }
-     } else {
-         console.warn('No matching menu item for path:', currentPath);
-     }
- });
+//                  // Keep dropdown menu visible
+//                  const dropdownMenu = parentElement.nextElementSibling;
+//                  if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+//                      dropdownMenu.classList.add('show');
+//                  }
+//              }
+//          }
+//      } else {
+//          console.warn('No matching menu item for path:', currentPath);
+//      }
+//  });
+
 
 
 (function ($) {

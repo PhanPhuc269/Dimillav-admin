@@ -6001,7 +6001,7 @@ textarea {
 
 /* Hiệu ứng đổi màu khi di chuột vào card */
 .card:hover {
-  background: linear-gradient(90deg, #ff8c00, #ffa500);
+  background: linear-gradient(90deg, #29bdb8, #8e96c5);
   color: white;
   transform: translateY(-5px);
   /* Nhẹ nhàng nổi lên khi hover */
@@ -6166,4 +6166,9 @@ background: #fff;
 }
 .top-71{
   top: 71px !important;
+}
+.active-sub{
+  color: var(--primary) !important;
+  background: var(--dark);
+  border-color: var(--primary);
 }

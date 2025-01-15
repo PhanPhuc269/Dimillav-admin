@@ -6,6 +6,7 @@ const Product = require("../models/Product");
 const ProductService = require('../services/ProductService');
 const cloudinary = require('cloudinary').v2;
 const {upload} = require('../../../config/cloudinary/cloudinaryConfig');
+const CategoryService= require('../services/CategoryService');
 
 class ProductController {
 
@@ -19,9 +20,10 @@ class ProductController {
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
+            const subCategories = await CategoryService.getAllSubcategories();
 
             // Render form với dữ liệu sản phẩm
-            res.render('edit-product', { product: mongooseToObject(product) });
+            res.render('edit-product', { product: mongooseToObject(product), categories: mutipleMongooseToObject(subCategories) });
         } catch (error) {
             console.error('Error rendering edit form:', error);
             res.status(500).json({ message: 'Error rendering edit form', error });
@@ -230,6 +232,11 @@ class ProductController {
                         errors.originalPrice = 'Original price must be a non-negative number.';
                     }
                 }
+                //Kiểm tra category
+                const subCategories = await CategoryService.getAllSubcategories();
+                if (subCategories.findIndex(subCategory => subCategory.name === updateData.category) === -1) {
+                    errors.category = 'Category is invalid';
+                }
     
                 // Validate bảo hành
                 if (updateData.warranty !== undefined) {
@@ -299,7 +306,10 @@ class ProductController {
                     const imagePaths = req.files.map(file => file.path);
                     product.images.push(...imagePaths); // Thêm tất cả hình ảnh mới vào danh sách
                 }
-    
+                if(product.category !== updateData.category){
+                    await CategoryService.decreaseProductCount(product.category);
+                    await CategoryService.increaseProductCount(updateData.category);
+                }
                 // Lưu sản phẩm sau khi cập nhật
                 const updatedProduct = await ProductService.saveProduct(product);
     
@@ -424,7 +434,8 @@ class ProductController {
     // Render form to create a new product
     async createProductForm(req, res, next) {
         try {
-            res.render('create-product');
+            const subCategories = await CategoryService.getAllSubcategories();
+            res.render('create-product' , {categories : mutipleMongooseToObject(subCategories)});
         } catch (error) {
             console.error('Error rendering create product form:', error);
             res.status(500).json({ message: 'Error rendering create product form', error });
@@ -440,16 +451,21 @@ class ProductController {
                     return res.status(400).json({ message: 'Error uploading files', error: err.message });
                 }
     
-                const { name, description, originalPrice, warranty, type, availibility, category, brand, stock } = req.body;
+                const { name, description, originalPrice, salePrice, warranty, type, availibility, category, brand, stock } = req.body;
     
                 // Validate required fields
-                const requiredFields = ['name', 'description', 'originalPrice', 'warranty', 'type', 'availibility', 'category', 'brand', 'stock'];
+                const requiredFields = ['name', 'description', 'originalPrice', 'salePrice' , 'warranty', 'type', 'availibility', 'category', 'brand', 'stock'];
                 let errors = {};
     
                 for (const field of requiredFields) {
                     if (!req.body[field] || req.body[field].toString().trim() === '') {
                         errors[field] = `Field '${field}' is required.`;
                     }
+                }
+                //Kiểm tra category
+                const subCategories = await CategoryService.getAllSubcategories();
+                if (subCategories.findIndex(subCategory => subCategory.name === category) === -1) {
+                    errors.category = 'Category is invalid';
                 }
     
                 // Validate price and quantity
@@ -500,6 +516,7 @@ class ProductController {
                     name,
                     description,
                     originalPrice,
+                    salePrice,
                     type,
                     warranty,
                     availibility,
@@ -514,7 +531,8 @@ class ProductController {
                         };
                     }),
                 });
-    
+                // Tăng số lượng sản phẩm của category
+                await CategoryService.increaseProductCount(category);
                 // Save product
                 const product =  await ProductService.saveProduct(newProduct);
     

@@ -86,6 +86,13 @@ module.exports={
     getFileName: (url)=> {
         return url.split('/').pop();
     },
+
+    //Định dạng tiền Việt Nam
+    formatPrice: function (price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+    },
+    
+
      // Helper mới: getFirstImage
      getFirstImage: (images) => {
       return images && images.length > 0 ? images[0] : '/path/to/default-image.jpg';
@@ -95,10 +102,23 @@ module.exports={
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
     },
 
+
     join: (array, separator = ', ') => {
       if (Array.isArray(array)) {
           return array.join(separator);
       }
       return '';
+
+    },
+    // Helper mới: formatCurrency
+    formatCurrency: function (amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    },
+      // Helper mới: getFirstImage
+      getFirstImage: (images) => {
+      return images && images.length > 0 ? images[0] : '/path/to/default-image.jpg';
+    },
+
   },
+
 }

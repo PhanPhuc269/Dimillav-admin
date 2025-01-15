@@ -1,6 +1,6 @@
 const Product = require('../models/Product');
 // Removed Category and Manufacturer dependencies
-// const Category = require('../models/Category'); 
+ const Category = require('../models/Category'); 
 // const Manufacturer = require('../models/Manufacturer'); 
 
 class ProductService {
