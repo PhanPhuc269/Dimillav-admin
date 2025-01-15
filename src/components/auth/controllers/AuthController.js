@@ -200,6 +200,10 @@ class AuthController{
             res.redirect('/auth/login'); // Chuyển hướng về trang đăng nhập
         });
     };
+    confirmEmail (req, res,next){
+      return res.render('notify');
+    };
+    
 
 }
 

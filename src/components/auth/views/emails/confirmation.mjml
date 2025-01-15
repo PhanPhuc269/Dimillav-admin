@@ -6,7 +6,7 @@
           <h1>Hello {{username}},</h1>
           <p>Please confirm your account by clicking the button below:</p>
         </mj-text>
-        <mj-button href="http://{{host}}/confirm/{{token}}" background-color="#4A90E2" color="#ffffff">
+        <mj-button href="http://{{host}}/auth/confirm/{{token}}" background-color="#4A90E2" color="#ffffff">
           Confirm Account
         </mj-button>
         <mj-text>

@@ -40,7 +40,7 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
             messageDiv.classList.remove('alert-danger');
             messageDiv.classList.add('alert-success');
             //Chuyển tới trang đăng nhập
-            window.location.href = '/auth/login';
+            window.location.href = '/auth/authentication';
         } else {
             messageDiv.textContent = body.message || 'Registration failed!';
             messageDiv.classList.remove('alert-success');

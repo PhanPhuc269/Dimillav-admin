@@ -9,11 +9,11 @@ module.exports = {
   ensureAuthenticated:(req, res, next)=> {
     if (req.isAuthenticated()) {
         if (!req.user.isConfirmed) {
-            return res.redirect('/authentication'); // Redirect đến trang xác thực email
+            return res.redirect('/auth/instruction'); // Redirect đến trang xác thực email
         }
-        // if (!req.session.authenByCode) {
-        //     return res.redirect('/auth/verify'); // Redirect nếu tài khoản bị khóa
-        // }
+        if (!req.session.authenByCode) {
+            return res.redirect('/auth/verify'); // Redirect nếu tài khoản bị khóa
+        }
         return next();
     }
     res.redirect('/auth/login'); // Redirect nếu chưa đăng nhập
