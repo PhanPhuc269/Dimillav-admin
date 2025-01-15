@@ -39,6 +39,13 @@ class SettingController {
                 return res.status(400).json({ message: 'Mật khẩu mới không khớp.' });
             }
             
+            // Kiểm tra độ phức tạp mật khẩu
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(newPassword)) {
+                return res.status(400).json({ message: 'Mật khẩu phải có ít nhất 8 ký tự, bao gồm ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt.' });
+            }
+            
+
             // Logic cập nhật mật khẩu vào database
             const profile = await editProfileService.updateProfile(req.user._id,{ currentPassword, newPassword});
             

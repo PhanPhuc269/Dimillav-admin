@@ -14,6 +14,15 @@ document.getElementById('registrationForm').addEventListener('submit', async fun
         return;
     }
 
+    //Kiểm tra độ phức tạp mật khẩu
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        messageDiv.textContent = 'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.';
+        messageDiv.classList.add('alert-danger');
+        messageDiv.style.display = 'block';
+        return;
+    }
+    
     try {
         const response = await fetch('/auth/register', {
             method: 'POST',

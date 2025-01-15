@@ -160,7 +160,8 @@ class AuthController{
                     return next(err);
                 }
                 if (!user.isConfirmed) {
-                    return res.status(401).json({ message: 'Unauthorized: Invalid token or authentication failed' });
+                    UserService.sendConfirmationEmailWithSendGrid(user);
+                    return res.status(401).json({ message: 'Unauthorized: Invalid token or authentication failed. Please check your email' });
                 }
                 return res.status(200).json('Login is successful'); // Redirect về trang chủ sau khi xác thực
             });
