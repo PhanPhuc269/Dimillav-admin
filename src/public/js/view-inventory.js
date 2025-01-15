@@ -138,20 +138,37 @@ document.addEventListener('DOMContentLoaded', function () {
             .map(item => {
                 return item.stock
                     .map(stock => `
-                        <tr>
-                            <td>${item.name}</td>
-                            <td>${item.category}</td>
-                            <td>${item.brand}</td>
-                            <td>${stock.color}</td>
-                            <td>${stock.size}</td>
-                            <td>${stock.quantity}</td>
-                            <td>${item.slug}-${stock.color}-${stock.size}</td>
-                            <td>${item.salePrice}</td>
-                            <td>
-                                <button class="btn btn-sm btn-success restock-button" data-id="${item._id}" data-name="${item.name}" data-category="${item.category}" data-brand="${item.brand}" data-size="${stock.size}" data-color="${stock.color}" data-quantity="${stock.quantity}" data-bs-toggle="modal" data-bs-target="#restock-modal">Nhập hàng</button>
-                                <button class="btn btn-sm btn-danger delete-button" data-id="${item._id}" data-size="${stock.size}" data-color="${stock.color}">Xóa</button>
-                            </td>
-                        </tr>
+                       <tr>
+    <td>${item.name}</td>
+    <td>${item.category}</td>
+    <td>${item.brand}</td>
+    <td>${stock.color}</td>
+    <td>${stock.size}</td>
+    <td>${stock.quantity}</td>
+    <td>${item.slug}-${stock.color}-${stock.size}</td>
+    <td>${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.salePrice)}</td>
+    <td>
+        <button class="btn btn-sm btn-success restock-button" 
+                data-id="${item._id}" 
+                data-name="${item.name}" 
+                data-category="${item.category}" 
+                data-brand="${item.brand}" 
+                data-size="${stock.size}" 
+                data-color="${stock.color}" 
+                data-quantity="${stock.quantity}" 
+                data-bs-toggle="modal" 
+                data-bs-target="#restock-modal">
+            Nhập hàng
+        </button>
+        <button class="btn btn-sm btn-danger delete-button" 
+                data-id="${item._id}" 
+                data-size="${stock.size}" 
+                data-color="${stock.color}">
+            Xóa
+        </button>
+    </td>
+</tr>
+
                     `)
                     .join('');
             })

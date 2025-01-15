@@ -6,7 +6,6 @@ const {ensureAuthenticated} = require('../../middlewares/AuthMiddleware');
 
 router.get('/',orderController.ViewOrderList);
 router.get('/detail/:_id',orderController.ViewOrderDetail);
-// ensureAuthenticated,
-// ensureAuthenticated,
+
 
 module.exports = router;
