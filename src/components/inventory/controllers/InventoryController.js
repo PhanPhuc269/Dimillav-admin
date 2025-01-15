@@ -1,7 +1,7 @@
 const { mutipleMongooseToObject } = require('@utils/mongoose');
 const { mongooseToObject } = require('@utils/mongoose');
 const session = require('express-session');
-const inventoryService = require('../services/inventoryService');
+const inventoryService = require('../services/InventoryService');
 
 class InventoryController{
     async viewInventory(req, res, next) {
