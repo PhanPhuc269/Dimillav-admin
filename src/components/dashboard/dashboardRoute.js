@@ -8,5 +8,7 @@ router.get('/', dashboardController.viewDashboard);
 
 
 
+// ensureAuthenticated,
+
 
 module.exports = router;

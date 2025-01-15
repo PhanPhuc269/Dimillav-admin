@@ -295,3 +295,33 @@
     background: var(--dark);
     border-color: var(--primary);
 }
+.sidebar .nav-link {
+    color: var(--light);
+    padding: 10px 20px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: var(--primary);
+    background: var(--dark);
+    border-color: var(--primary);
+    font-weight: bold;
+}
+.nav-item.dropdown .dropdown-menu {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.nav-item.dropdown.show .dropdown-menu {
+    display: block;
+    opacity: 1;
+}
+
+.nav-item.dropdown .nav-link.active {
+    background-color: var(--dark);
+    color: var(--primary);
+}
+
