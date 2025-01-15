@@ -12,10 +12,12 @@ class AuthController{
         const { username, email, password } = req.body;
         try {
             const user = await UserService.registerUser(username, email, password);
+
             req.logIn(user, (err) => {
                 if (err) {
                     return next(err);
                 }
+                UserService.sendConfirmationEmailWithSendGrid(user);
                 return res.status(201).json('Login is successful'); // Redirect về trang chủ sau khi xác thực
             });
         } catch (error) {
