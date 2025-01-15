@@ -201,7 +201,7 @@ class AuthController{
         });
     };
     confirmEmail (req, res,next){
-      return res.render('notify');
+      return res.render('notify', { layout: 'content-only' });
     };
     
 
