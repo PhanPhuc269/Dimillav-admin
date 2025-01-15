@@ -83,7 +83,7 @@ class UserService {
                 throw new Error('User not found');
             }
             if (user.secretKey != null) {
-                //return null;
+                return null;
             }
             var secretKeyBase32 = secretKey.base32;
 

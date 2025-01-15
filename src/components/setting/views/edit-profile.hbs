@@ -164,7 +164,7 @@ border-color: rgba(24,28,33,0.03) !important;
             </div>
           </form>
           <div class="tab-pane fade" id="account-change-password">
-            <form class="card-body pb-2" action="/setting/update-profile/password" method="post">
+            <form id="account-change-password form" class="card-body pb-2" action="/setting/update-profile/password" method="post">
 
               <div class="form-group">
                 <label class="form-label">Current password</label>
@@ -229,6 +229,7 @@ border-color: rgba(24,28,33,0.03) !important;
   </div> --}}
 
 </div>
+<script src="/js/edit-profile.js"></script>
 {{#if (not profile.isConfirmed)}}
 <script>
   document.addEventListener('DOMContentLoaded', () => {

@@ -4,7 +4,7 @@ const router =express.Router();
 const dashboardController= require('./controllers/DashboardController');
 const {ensureAuthenticated, ensureLogin } = require('@AuthMiddleware');
 
-router.get('/', dashboardController.viewDashboard); 
+router.get('/', ensureAuthenticated, dashboardController.viewDashboard); 
 
 
 
