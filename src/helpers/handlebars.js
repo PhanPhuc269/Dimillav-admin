@@ -105,4 +105,9 @@ module.exports={
       getFirstImage: (images) => {
       return images && images.length > 0 ? images[0] : '/path/to/default-image.jpg';
     },
+    formatDate: function(isoString) {
+      const date = new Date(isoString);
+      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+      return date.toLocaleDateString('en-US', options);
+    },
 }

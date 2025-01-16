@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td>${account.email}</td>
                 <td>${account.phone}</td>
                 <td>${account.role}</td>
-                <td>${account.createdAt}</td>
+                <td>${formatDate(account.createdAt)}</td>
                 <td>${account.status}</td>
                 <td>
                     <a class="btn btn-sm btn-info text-white" href="/account/details/${account.username}">Xem</a>
@@ -403,3 +403,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 });
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short' };
+    return date.toLocaleDateString('en-US', options);
+}
