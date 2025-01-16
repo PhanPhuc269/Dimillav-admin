@@ -284,7 +284,10 @@ class ProductController {
                 if (!product) {
                     return res.status(404).json({ message: 'Product not found' });
                 }
-    
+                if(product.category !== updateData.category){
+                    await CategoryService.decreaseProductCount(product.category);
+                    await CategoryService.increaseProductCount(updateData.category);
+                }
                 // Cập nhật các trường từ body
                 for (const key in updateData) {
                     if (updateData[key] !== undefined && key !== 'stock') {
@@ -306,10 +309,7 @@ class ProductController {
                     const imagePaths = req.files.map(file => file.path);
                     product.images.push(...imagePaths); // Thêm tất cả hình ảnh mới vào danh sách
                 }
-                if(product.category !== updateData.category){
-                    await CategoryService.decreaseProductCount(product.category);
-                    await CategoryService.increaseProductCount(updateData.category);
-                }
+
                 // Lưu sản phẩm sau khi cập nhật
                 const updatedProduct = await ProductService.saveProduct(product);
     

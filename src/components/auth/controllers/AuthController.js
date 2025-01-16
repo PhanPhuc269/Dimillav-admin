@@ -132,11 +132,7 @@ class AuthController{
         // Gửi lại email xác nhận
         await UserService.sendConfirmationEmailWithSendGrid(user);
 
-        res.render('waiting-confirmation', {
-            username: user.username,
-            email: user.email,
-            message: 'A new confirmation email has been sent.',
-        })
+        res.render('notify', { layout: 'content-only', email: user.email });
     }
     // [GET] /login
     viewLogin(req, res, next) {
@@ -203,7 +199,7 @@ class AuthController{
         });
     };
     confirmEmail (req, res,next){
-      return res.render('notify', { layout: 'content-only' });
+      return res.render('notify', { layout: 'content-only', email: req.user.email });
     };
     
 

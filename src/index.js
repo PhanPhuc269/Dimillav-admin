@@ -24,13 +24,13 @@ const route = require('./routes');
 
 sessionMiddleware=session({
     secret: process.env.MY_SECRET_KEY,
-    resave: false,
+    resave: true,
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
         secure: false, // Chỉ dùng với HTTPS
         sameSite: 'lax', // Bảo vệ chống CSRF
-        maxAge: 3600000 // Thời gian sống của session cookie
+        maxAge: 36000000 // Thời gian sống của session cookie
     }
 })
 app.use(sessionMiddleware);
