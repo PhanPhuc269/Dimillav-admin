@@ -7,6 +7,8 @@ const handlebars = require('express-handlebars');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
 const fs = require('fs');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
 
 const session = require('express-session');
 const passport = require('passport');
@@ -26,6 +28,7 @@ sessionMiddleware=session({
     secret: process.env.MY_SECRET_KEY,
     resave: true,
     saveUninitialized: false,
+    store: MongoStore.create({ client: mongoose.connection.getClient() }),
     cookie: {
         httpOnly: true,
         secure: false, // Chỉ dùng với HTTPS

@@ -102,6 +102,13 @@ border-color: rgba(24,28,33,0.03) !important;
   background: white;
   color:  rgb(119, 119, 119);
 }
+.file-name{
+  text-decoration: none;
+}
+.file-name:hover {
+  color: #0056b3; /* Màu xanh khi hover */
+
+}
 
 </style>
 <div class="container-fluid light-style flex-grow-1 container-p-y pt-4 px-4">
@@ -129,9 +136,10 @@ border-color: rgba(24,28,33,0.03) !important;
               <div class="media-body ml-4">
                 <label class="btn btn-outline-primary">
                   Upload new photo
-                  <input type="file" name="avatar" class="form-control account-settings-fileinput">
+                  <input type="file" name="avatar" class="form-control account-settings-fileinput" id="file-input">
                 </label> &nbsp;
-                <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                <span id="file-name" class="file-name" id="file-name">No file chosen</span>
+                {{!-- <button type="button" class="btn btn-default md-btn-flat">Reset</button> --}}
 
                 <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
               </div>
@@ -232,6 +240,7 @@ border-color: rgba(24,28,33,0.03) !important;
 <script src="/js/edit-profile.js"></script>
 {{#if (not profile.isConfirmed)}}
 <script>
+  
   document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('resend-confirmation-button').addEventListener('click', function() {
       document.getElementById('resend-email-form').submit();
